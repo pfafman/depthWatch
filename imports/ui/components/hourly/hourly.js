@@ -15,23 +15,25 @@ Template.hourly.onCreated (() => {
 
 Template.hourly.onRendered (() => {
 
-    Tracker.autorun(() => {
-        console.log("Hourly Have Depths", Depths.find({}).count());
-        select = {
-            time: {
-                $gte: moment().subtract(48,'hours').toDate()
-            }
-        };
-        if (Depths.find(select).count() > 0) {
+    Tracker.autorun(async () => {
+        
+        if (Depths.find({}).count() > 0) {
+
+            //console.log("update daily ...", Depths.find({}).count());
+
+            const results = await Meteor.callAsync('hourDepths');
+
+            //console.log("update daily", results.length);
+            
             let times = ["times"];
             let data = ["Depth"]
-            Depths.find(select).forEach( depth => {
-                //console.log(depth)
+            results.forEach( depth => {
+                //console.log(depth);
                 times.push(depth.time);
                 data.push([depth.enter, depth.max, depth.min, depth.exit]);
             });
 
-            var chart = bb.generate({
+           var chart = bb.generate({
                 data: {
                     x: "times",
                     columns: [
@@ -56,7 +58,7 @@ Template.hourly.onRendered (() => {
                     x: {
                         type: "timeseries",
                         tick: {
-                            format: "%H:%M"
+                            format: "%I:00 %p"
                         },
                         padding: {
                             left: 1,
@@ -66,8 +68,10 @@ Template.hourly.onRendered (() => {
                 },
                 bindto: "#hourlyChart"
             });
+        
         }
-    });
+    });    
+
 });
 
 

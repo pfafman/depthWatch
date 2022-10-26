@@ -21,7 +21,8 @@ Meteor.methods({
               'day': {
                 $dateToString: {
                   format: "%Y-%m-%d",
-                  date: "$time"
+                  date: "$time",
+                  timezone: "America/Denver"
                 }
               }
             },
@@ -60,7 +61,7 @@ Meteor.methods({
 
       const pipeline = [
         {
-          $filter: { 'time' :
+          $match: { 'time' :
             {
               $gt: moment().subtract(2, 'days').startOf('day').toDate()
             }
@@ -74,8 +75,9 @@ Meteor.methods({
             '_id': {
               'day': {
                 $dateToString: {
-                  format: "%Y-%m-%d %h",
-                  date: "$time"
+                  format: "%Y-%m-%d %H:00:00",
+                  date: "$time",
+                  timezone: "America/Denver"
                 }
               }
             },

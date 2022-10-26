@@ -22,7 +22,7 @@ Template.daily.onRendered (() => {
 
             const results = await Meteor.callAsync('dayDepths');
 
-            console.log("update daily", results.length);
+            //console.log("update daily", results.length);
             
             let times = ["times"];
             let data = ["Depth"]
@@ -70,7 +70,7 @@ Template.daily.onRendered (() => {
         
         }
     });
-    
+
 });
 
 
