@@ -8,7 +8,7 @@ import './daily.html';
 
 
 Template.daily.onCreated (() => {
-    console.log("daily.onCreated");
+    //console.log("daily.onCreated");
     //Meteor.subscribe('depths.last48');
 });
 
@@ -29,7 +29,12 @@ Template.daily.onRendered (() => {
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);
-                data.push([depth.enter, depth.max, depth.min, depth.exit]);
+                data.push([
+                    maxDepth - depth.enter, 
+                    maxDepth - depth.min, 
+                    maxDepth - depth.max, 
+                    maxDepth - depth.exit
+                    ]);
             });
 
            var chart = bb.generate({
@@ -64,6 +69,9 @@ Template.daily.onRendered (() => {
                             right: 1
                         }
                     }
+                },
+                size: {
+                    height: 200
                 },
                 bindto: "#dailyChart"
             });

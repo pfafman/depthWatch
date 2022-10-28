@@ -1,7 +1,8 @@
 <template name="hourly">
 
   {{#if Template.subscriptionsReady}}
-    <h4>Current {{currentDepth}}</h4>
+    <div class="current">Current {{currentDepth}} cm</div>
+    <div id="gaugeChart"></div>
 
     <h4>Hourly</h4>
     <div id="hourlyChart"></div>

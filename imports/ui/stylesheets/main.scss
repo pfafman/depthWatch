@@ -1,6 +1,7 @@
 
 body {
-	padding: 50px;
+	padding-left: 50px;
+  padding-right: 50px; 
 }
 
 
@@ -26,3 +27,16 @@ body {
 .home-content {
   position: relative;
 }
+
+.current {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+// #hourlyChart {
+//   height: 100px;
+// }
+
+// #dailyChart {
+//   height: 100px;
+// }

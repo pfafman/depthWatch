@@ -6,7 +6,7 @@
     "test": "meteor test --once --driver-package meteortesting:mocha"
   },
   "dependencies": {
-    "@babel/runtime": "^7.19.4",
+    "@babel/runtime": "^7.20.0",
     "@materializecss/materialize": "^1.1.0",
     "billboard.js": "^3.6.2",
     "d3": "^7.6.1",
