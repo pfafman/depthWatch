@@ -1,9 +1,13 @@
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
+import '../both';
+
 // Import needed templates
 import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
 import '../../ui/pages/not-found/not-found.js';
+
+console.log("Version", VERSION);
 
 // Set up all routes in the app
 FlowRouter.route('/', {

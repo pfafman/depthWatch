@@ -1,3 +1,14 @@
 <template name="App_body">
-  {{> yield}}
+  <header></header>
+  <main>
+    {{> yield}}
+  </main>
+  <footer class="page-footer">
+    <div class="footer-copyright">
+      <div class="container">
+        © 2022 Kyotehut
+        <span class="grey-text text-darken-4 right">Version {{version}}</span>
+      </div>
+    </div>
+  </footer>
 </template>

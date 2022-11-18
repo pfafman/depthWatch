@@ -1,7 +1,14 @@
 
 body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 	padding-left: 50px;
   padding-right: 50px; 
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 
@@ -40,3 +47,20 @@ body {
 // #dailyChart {
 //   height: 100px;
 // }
+
+
+
+
+.page-footer {
+  background-color: white;
+  .container {
+    background-color: white;
+    color: #333;
+  }
+
+
+  .footer-copyright {
+    background-color: white;
+  }
+}
+
