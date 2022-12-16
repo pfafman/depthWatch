@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export MONGO_URL="mongodb://localhost:27001/?directConnection=true"
+export MONGO_URL="mongodb://localhost:27001/?replicaSet=kyote&directConnection=true"
 export MONGO_OPLOG_URL="mongodb://oplogger:PasswordForOplogger@localhost:27001/local?authSource=admin&replicaSet=kyote&directConnection=true"
 
 export FORCE_SSL=1

@@ -1,3 +1,3 @@
 
 
-const maxDepth = 145;
+maxDepth = 145;

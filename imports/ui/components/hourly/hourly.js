@@ -143,6 +143,17 @@ Template.hourly.helpers({
         } else {
             "N/A";
         }
+    },
+
+    age() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            //const percent = 100*(maxDepth - current.exit)/maxDepth;
+            const age = moment.duration(moment().diff(current.time)).humanize()
+            return age;
+        } else {
+            "";
+        }
     }
 });
 

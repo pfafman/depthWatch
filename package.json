@@ -7,12 +7,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.1",
-    "@materializecss/materialize": "^1.1.0",
+    "@materializecss/materialize": "git+https://github.com/materializecss/materialize.git",
     "billboard.js": "^3.6.3",
     "d3": "^7.6.1",
     "jquery": "^3.6.1",
     "meteor-node-stubs": "^1.2.5",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "pinst": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^4.3.7"
