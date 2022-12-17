@@ -151,7 +151,7 @@ Template.hourly.helpers({
             //const percent = 100*(maxDepth - current.exit)/maxDepth;
             //const age = moment.duration(moment().diff(current.time)).humanize()
             time = moment(current.time).format('llll')
-            return `at #{time}`;
+            return `at ${time}`;
         } else {
             "";
         }
