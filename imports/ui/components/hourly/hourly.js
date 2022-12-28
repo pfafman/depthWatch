@@ -174,6 +174,10 @@ Template.hourly.helpers({
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
             ""
         }
+    },
+
+    capacity() {
+        return capacity.toLocaleString('us', {maximumFractionDigits: 0})
     }
 });
 
