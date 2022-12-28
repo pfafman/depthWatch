@@ -1,4 +1,5 @@
 import './body.html';
+import moment from 'moment';
 
 
 Template.App_body.helpers({
@@ -8,7 +9,7 @@ Template.App_body.helpers({
     },
 
     year() {
-        moment().format('YYYY');
+        return moment().format('YYYY');
     }
 
 });

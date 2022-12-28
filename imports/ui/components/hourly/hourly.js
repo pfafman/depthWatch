@@ -171,7 +171,7 @@ Template.hourly.helpers({
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             const gallons =  (maxDepth - current.exit)/maxDepth * capacity;
-            return gallons.toFixed(0)
+            return gallons.toLocaleString('us', {maximumFractionDigits: 0})
             ""
         }
     }
