@@ -155,6 +155,15 @@ Template.hourly.helpers({
         } else {
             "";
         }
+    },
+
+    gallons() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return (maxDepth - current)/maxDepth * capacity;
+        } else {
+            ""
+        }
     }
 });
 

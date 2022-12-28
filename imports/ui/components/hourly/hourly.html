@@ -1,7 +1,8 @@
 <template name="hourly">
 
   {{#if Template.subscriptionsReady}}
-    <div class="current">Current {{currentDepth}} cm  {{age}}</div>
+    <div class="current">Current {{currentDepth}}"  {{age}}</div>
+    <div class="current">~{{gallons}} gallons</div>
     <div id="gaugeChart"></div>
 
     <h4>Hourly</h4>
