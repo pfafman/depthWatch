@@ -145,6 +145,16 @@ Template.hourly.helpers({
         }
     },
 
+    currentHeight() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            const height = (maxDepth - current.exit);
+            return height.toFixed(1);
+        } else {
+            "N/A";
+        }
+    },
+
     age() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
@@ -160,8 +170,8 @@ Template.hourly.helpers({
     gallons() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            return (maxDepth - current)/maxDepth * capacity;
-        } else {
+            const gallons =  (maxDepth - current.exit)/maxDepth * capacity;
+            return gallons.toFixed(0)
             ""
         }
     }
