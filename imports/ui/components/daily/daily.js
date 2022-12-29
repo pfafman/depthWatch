@@ -30,10 +30,10 @@ Template.daily.onRendered (() => {
                 //console.log(depth);
                 times.push(depth.time);
                 data.push([
-                    maxDepth - depth.enter, 
-                    maxDepth - depth.min, 
-                    maxDepth - depth.max, 
-                    maxDepth - depth.exit
+                    Math.round((maxDepth - depth.enter) * 100)/100, 
+                    Math.round((maxDepth - depth.min)   * 100)/100, 
+                    Math.round((maxDepth - depth.max ) * 100)/100, 
+                    Math.round((maxDepth - depth.exit ) * 100)/100
                     ]);
             });
 
