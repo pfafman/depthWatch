@@ -1,7 +1,7 @@
 <template name="hourly">
 
   {{#if Template.subscriptionsReady}}
-    <div class="current">Current reading is {{currentDepth}} inches down at {{age}}</div>
+    <div class="current">Current reading is {{currentDepth}} inches down {{age}}</div>
     <div class="current">{{currentHeight}} inches of water in tank.  {{gallons}} of {{capacity}} gallons</div>
     <div id="gaugeChart"></div>
 
