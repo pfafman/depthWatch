@@ -141,7 +141,7 @@ Template.hourly.helpers({
             //const percent = 100*(maxDepth - current.exit)/maxDepth;
             return current.exit.toFixed(1);
         } else {
-            "N/A";
+            return "N/A";
         }
     },
 
@@ -151,7 +151,7 @@ Template.hourly.helpers({
             const height = (maxDepth - current.exit);
             return height.toFixed(1);
         } else {
-            "N/A";
+            return "N/A";
         }
     },
 
@@ -160,10 +160,10 @@ Template.hourly.helpers({
         if (current != null) {
             //const percent = 100*(maxDepth - current.exit)/maxDepth;
             //const age = moment.duration(moment().diff(current.time)).humanize()
-            time = moment(current.time).format('llll')
+            time = moment(current.time).format('llll');
             return `at ${time}`;
         } else {
-            "";
+            return "";
         }
     },
 
@@ -172,8 +172,28 @@ Template.hourly.helpers({
         if (current != null) {
             const gallons =  (maxDepth - current.exit)/maxDepth * capacity;
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
-            ""
+        } else {
+            return "";
         }
+    },
+
+    change() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const oldest  = Depths.findOne({},{ sort: {time: 1}, limit:1 });
+        if ((current != null) && (oldest != null)) {
+            const gallons =  (current.exit - oldest.exit)/maxDepth * capacity;
+            const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
+            if (gallons < 0) {
+                trend = "Down";
+                gallons = -gallons;
+            } else {
+                trend = "Up"
+            }
+            return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
+        } else {
+            return "";
+        }
+
     },
 
     capacity() {

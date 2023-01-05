@@ -1,6 +1,9 @@
 <template name="daily">
   {{#if Template.subscriptionsReady}}
-    <h4>Daily</h4>
+    <h4>
+      Daily
+      <span class="trend right">{{change}}</span>
+    </h4>
     <div id="dailyChart"></div>
   {{else}}
     ...

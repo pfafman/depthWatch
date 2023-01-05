@@ -5,7 +5,11 @@
     <div class="current">{{currentHeight}} inches of water in tank.  {{gallons}} of {{capacity}} gallons</div>
     <div id="gaugeChart"></div>
 
-    <h4>Hourly</h4>
+    
+    <h4>
+      Hourly
+      <span class="trend right">{{change}}</span>
+    </h4>
     <div id="hourlyChart"></div>
   {{else}}
     ...
