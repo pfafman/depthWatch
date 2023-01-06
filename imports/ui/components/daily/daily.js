@@ -9,7 +9,6 @@ import './daily.html';
 
 Template.daily.onCreated (() => {
     //console.log("daily.onCreated");
-    //Meteor.subscribe('depths.last48');
 });
 
 Template.daily.onRendered (() => {

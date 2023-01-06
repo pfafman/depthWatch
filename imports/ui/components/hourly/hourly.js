@@ -68,6 +68,7 @@ Template.hourly.onRendered (() => {
             //console.log("update daily ...", Depths.find({}).count());
 
             const results = await Meteor.callAsync('hourDepths');
+            //const results = Depths.find({}, {sort: {time: 1}});
 
             //console.log("update daily", results.length);
             
@@ -181,13 +182,14 @@ Template.hourly.helpers({
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         const oldest  = Depths.findOne({},{ sort: {time: 1}, limit:1 });
         if ((current != null) && (oldest != null)) {
-            const gallons =  (current.exit - oldest.exit)/maxDepth * capacity;
+            console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
+            let gallons =  - (current.exit - oldest.exit)/maxDepth * capacity;
             const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
             if (gallons < 0) {
                 trend = "Down";
-                gallons = -gallons;
+                gallons = - gallons;
             } else {
-                trend = "Up"
+                trend = "Up";
             }
             return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
         } else {
