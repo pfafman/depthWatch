@@ -180,22 +180,25 @@ Template.hourly.helpers({
 
     change() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
-        const oldest  = Depths.findOne({},{ sort: {time: 1}, limit:1 });
-        if ((current != null) && (oldest != null)) {
-            console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
-            let gallons =  - (current.exit - oldest.exit)/maxDepth * capacity;
-            const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
-            if (gallons < 0) {
-                trend = "Down";
-                gallons = - gallons;
+        if (current != null) {
+            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(48, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
+            if ((current != null) && (oldest != null)) {
+                console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
+                let gallons =  - (current.exit - oldest.exit)/maxDepth * capacity;
+                const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
+                if (gallons < 0) {
+                    trend = "Down";
+                    gallons = - gallons;
+                } else {
+                    trend = "Up";
+                }
+                return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
             } else {
-                trend = "Up";
+                return "";
             }
-            return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
         } else {
             return "";
         }
-
     },
 
     capacity() {
