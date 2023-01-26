@@ -73,15 +73,16 @@ Template.hourly.onRendered (() => {
             //console.log("update daily", results.length);
             
             let times = ["times"];
-            let data = ["Depth"]
+            let data = ["Gallons"];
+            factor = capacity / maxDepth;
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);
                 data.push([
-                    Math.round((maxDepth - depth.enter) * 100)/100, 
-                    Math.round((maxDepth - depth.min)   * 100)/100, 
-                    Math.round((maxDepth - depth.max ) * 100)/100, 
-                    Math.round((maxDepth - depth.exit ) * 100)/100
+                    Math.round((maxDepth - depth.enter) * factor), 
+                    Math.round((maxDepth - depth.min)   * factor),
+                    Math.round((maxDepth - depth.max )  * factor),
+                    Math.round((maxDepth - depth.exit ) * factor)
                     ]);
             });
 
