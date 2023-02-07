@@ -16,7 +16,7 @@ Template.hourly.onCreated (() => {
 Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
-        
+        //console.log(`hourly: Found ${Depths.find({}).count()} measurements`)
         if (Depths.find({}).count() > 0) {
 
             current = Depths.findOne({},{ sort: {time: -1}, limit:1 })
@@ -70,7 +70,7 @@ Template.hourly.onRendered (() => {
             const results = await Meteor.callAsync('hourDepths');
             //const results = Depths.find({}, {sort: {time: 1}});
 
-            //console.log("update daily", results.length);
+            console.log("update daily", results.length);
             
             let times = ["times"];
             let data = ["Gallons"];
@@ -86,7 +86,8 @@ Template.hourly.onRendered (() => {
                     ]);
             });
 
-           var chart = bb.generate({
+            console.log("Generate Chart");
+            var chart = bb.generate({
                 data: {
                     x: "times",
                     columns: [
@@ -184,7 +185,7 @@ Template.hourly.helpers({
         if (current != null) {
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(48, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
-                console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
+                //console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
                 let gallons =  - (current.exit - oldest.exit)/maxDepth * capacity;
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {

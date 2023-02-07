@@ -1,14 +1,14 @@
 <template name="hourly">
 
   {{#if Template.subscriptionsReady}}
-    <div class="current">Current reading is {{currentDepth}} inches down {{age}}</div>
-    <div class="current">{{currentHeight}} inches of water in tank.  {{gallons}} of {{capacity}} gallons</div>
+    <div class="flow-text current">Current reading is {{currentDepth}} inches down {{age}}</div>
+    <div class="flow-text current">{{currentHeight}} inches of water in tank.  {{gallons}} of {{capacity}} gallons</div>
     <div id="gaugeChart"></div>
 
     
     <h4>
       Hourly
-      <span class="trend right">{{change}}</span>
+      <span class="flow-text trend right">{{change}}</span>
     </h4>
     <div id="hourlyChart"></div>
   {{else}}
