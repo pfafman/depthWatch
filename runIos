@@ -1,0 +1,20 @@
+#!/bin/bash
+
+meteor remove-platform ios
+meteor remove-platform android
+
+
+echo "> meteor reset"
+meteor reset
+
+echo " Remove build"
+rm -rf .meteor/local
+
+sleep 1
+
+echo "> Add iOS platform"
+meteor add-platform ios
+echo ">"
+
+
+meteor run ios-device --mobile-server http://kyoteridge.pfafman.com
