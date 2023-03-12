@@ -14,8 +14,15 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     
     console.log("insertDepth", this.bodyParams);
 
+    check(this.bodyParams.depth, Number);
+    
     let depth = Math.round(Number(this.bodyParams.depth)*10)/10;
-    check(depth, Number);
+
+    if ((depth > 60) || (depth < 0)) {
+      console.log("insertDepth: bad value", depth);
+      return {status: 'bad value'};
+    }
+
 
     time = moment().startOf('minute').toDate();
     let rec = await Depths.findOneAsync({'time': time});
