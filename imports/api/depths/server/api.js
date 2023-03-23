@@ -18,7 +18,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     
     let depth = Math.round(Number(this.bodyParams.depth)*10)/10;
 
-    if ((depth > 60) || (depth < 0)) {
+    if ((depth > 57) || (depth < 0)) {
       console.log("insertDepth: bad value", depth);
       return {status: 'bad value'};
     }
