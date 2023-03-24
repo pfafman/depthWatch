@@ -1,0 +1,22 @@
+{
+  "lang": "en",
+  "name": "KyoteRidge",
+  "short_name": "KyoteRidge",
+  "scope": "/",
+  "id": "kyoteridge",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "icons": [
+  {
+    "src": "/icon-1024.png",
+    "sizes": "1024x1024",
+    "type": "image/png"
+  },
+  {
+    "src": "/icon-1092.png",
+    "sizes": "1092x1092",
+    "type": "image/png"
+  }
+  ]
+}
