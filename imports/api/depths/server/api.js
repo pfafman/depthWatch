@@ -12,7 +12,7 @@ Api = new Restivus({
 Api.addRoute('insertDepth', {authRequired: false}, {
   post: async function() {
     
-    console.log("insertDepth", this.bodyParams);
+    //console.log("insertDepth", this.bodyParams);
 
     check(this.bodyParams.depth, Number);
     
@@ -23,6 +23,20 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       return {status: 'bad value'};
     }
 
+    try {
+      let lastRec = await Depths.findOneAsync({},{'sort':{'$natural':-1}});
+      //console.log("lastRec", lastRec);
+
+      if (lastRec != null) {
+        console.log("New Depth", lastRec.exit, '->', depth);
+        if (Math.abs(depth-lastRec.exit) > .5) {
+          console.log("insertDepth: bad value", depth, "<>", lastRec.exit);
+          return {status: 'bad value'};
+        }
+      }
+    } catch (error) {
+      console.log("insertDepth: error on last check", error);
+    }
 
     time = moment().startOf('minute').toDate();
     let rec = await Depths.findOneAsync({'time': time});
