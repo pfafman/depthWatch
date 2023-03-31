@@ -28,7 +28,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       //console.log("lastRec", lastRec);
 
       if (lastRec != null) {
-        console.log("New Depth", lastRec.exit, '->', depth);
+        console.log("insertDepth: new depth", lastRec.exit, '->', depth);
         if (Math.abs(depth-lastRec.exit) > .5) {
           console.log("insertDepth: bad value", depth, "<>", lastRec.exit);
           return {status: 'bad value'};
