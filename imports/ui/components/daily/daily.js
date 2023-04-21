@@ -16,9 +16,11 @@ Template.daily.onRendered (() => {
 
     Tracker.autorun(async () => {
         
-        if (Depths.find({}).count() > 0) {
+        console.log("autorun daily ...", Depths.find({}).count());
 
-            //console.log("update daily ...", Depths.find({}).count());
+        if (Depths.find({}).count() >= 0) {
+
+            console.log("update daily ...", Depths.find({}).count());
 
             const results = await Meteor.callAsync('dayDepths');
 

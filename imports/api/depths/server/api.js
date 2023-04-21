@@ -23,14 +23,17 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       return {status: 'bad value'};
     }
 
+    console.log("insertDepth", depth);
+    
     try {
       let lastRec = await Depths.findOneAsync({},{'sort':{'$natural':-1}});
       //console.log("lastRec", lastRec);
 
       if (lastRec != null) {
         console.log("insertDepth: new depth", lastRec.exit, '->', depth);
-        if (Math.abs(depth-lastRec.exit) > .5) {
-          console.log("insertDepth: bad value", depth, "<>", lastRec.exit);
+        let age = moment().diff(lastRec.time, 'hours');
+        if ((age < 1) && Math.abs(depth-lastRec.exit) > .5) {
+          console.log("insertDepth: large change", depth, "<>", lastRec.exit);
           return {status: 'bad value'};
         }
       }

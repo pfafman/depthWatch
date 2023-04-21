@@ -8,7 +8,7 @@ import moment from 'moment';
 import './hourly.html';
 
 Template.hourly.onCreated (() => {
-    //console.log("hourly.onCreated");
+    console.log("hourly.onCreated");
     Meteor.subscribe('depths.last48');
 });
 
@@ -16,7 +16,7 @@ Template.hourly.onCreated (() => {
 Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
-        //console.log(`hourly: Found ${Depths.find({}).count()} measurements`)
+        console.log(`hourly: Found ${Depths.find({}).count()} measurements`)
         if (Depths.find({}).count() > 0) {
 
             current = Depths.findOne({},{ sort: {time: -1}, limit:1 })
