@@ -3,9 +3,15 @@
 import bb, {area, candlestick, step, gauge} from "billboard.js";
 import { Depths } from '../../../api/depths/depths.js';
 import { Meteor } from 'meteor/meteor';
+import { ReactiveVar } from 'meteor/reactive-var';
 import moment from 'moment';
 
+
 import './hourly.html';
+
+
+const minHeight = new ReactiveVar(null);
+const maxHeight = new ReactiveVar(null);
 
 Template.hourly.onCreated (() => {
     console.log("hourly.onCreated");
@@ -21,13 +27,24 @@ Template.hourly.onRendered (() => {
 
             current = Depths.findOne({},{ sort: {time: -1}, limit:1 })
 
+            const range = await Meteor.callAsync('depthRange');
+
+            console.log("depth range", range[0].min, range[0].max);
+
             if (current != null) {
+                
                 const percent = 100*(maxDepth - current.exit)/maxDepth;
+                const min = 100*(maxDepth - range[0].max)/maxDepth;
+                const max = 100*(maxDepth - range[0].min)/maxDepth;
+                minHeight.set(maxDepth - range[0].max);
+                maxHeight.set(maxDepth - range[0].min);
 
                 var gaugeChart = bb.generate({
                   data: {
                     columns: [
-                        ["Level", percent]
+                        ["min",   min],
+                        ["Level", percent],
+                        ["max",   max]
                     ],
                     type: gauge(), // for ESM specify as: gauge()
                     onclick: function (d, i) {
@@ -40,7 +57,12 @@ Template.hourly.onRendered (() => {
                         console.log("onout", d, i);
                     }
                   },
-                  gauge: {},
+                  gauge: {
+                    type: "multi",
+                    arcs: {
+                      minWidth: 40
+                    }
+                  },
                   color: {
                     pattern: [
                       "#FF0000",
@@ -58,7 +80,7 @@ Template.hourly.onRendered (() => {
                     }
                   },
                   size: {
-                    height: 150
+                    height: 200
                   },
                   bindto: "#gaugeChart"
                 });
@@ -156,6 +178,14 @@ Template.hourly.helpers({
         } else {
             return "N/A";
         }
+    },
+
+    minHeight() {
+        return  minHeight.get().toFixed(1);
+    },
+
+    maxHeight() {
+        return  maxHeight.get().toFixed(1);
     },
 
     age() {

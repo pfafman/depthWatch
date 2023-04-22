@@ -108,6 +108,34 @@ Meteor.methods({
       ];
 
       return Depths.aggregate(pipeline, {});
+  },
+
+
+  'depthRange' () {
+    const pipeline = [
+      {
+        $group: {
+          '_id': null,
+          'min': {
+            $min: '$min'
+          },
+          'max': {
+            $max: '$max'
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          'min': 1,
+          'max': 1
+        }
+      }
+    ]
+
+    return Depths.aggregate(pipeline, {});
   }
 
 });
+
+
