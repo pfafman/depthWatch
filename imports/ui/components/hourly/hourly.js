@@ -188,6 +188,11 @@ Template.hourly.helpers({
         return  maxHeight.get().toFixed(1);
     },
 
+    haveRange() {
+        (maxHeight.get() != null) && (minHeight.get() != null)
+    },
+
+
     age() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {

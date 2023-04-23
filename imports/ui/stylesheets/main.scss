@@ -38,6 +38,10 @@ main {
 .current {
   font-weight: bold;
   font-size: 1.2em;
+  .range {
+    font-style: italic;
+    font-size: 0.9em;
+  }
 }
 
 .trend {

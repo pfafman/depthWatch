@@ -6,9 +6,12 @@
       Current reading is {{currentDepth}} inches down {{age}}
     </div>
     <div class="flow-text current">
-      {{currentHeight}} inches of water in tank<br/>
-      {{gallons}} out of {{capacity}} gallons<br> 
-      Range {{minHeight}} -> {{maxHeight}}
+      {{currentHeight}} inches of water in tank &nbsp;
+      {{#if haveRange}}
+        <span class="range"> &nbsp; Range {{minHeight}} -> {{maxHeight}}</span>
+      {{/if}}
+      <br/>
+      {{gallons}} out of {{capacity}} gallons      
     </div>
     
     <div id="gaugeChart"></div>
