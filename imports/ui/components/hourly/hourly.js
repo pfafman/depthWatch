@@ -189,7 +189,7 @@ Template.hourly.helpers({
     },
 
     haveRange() {
-        (maxHeight.get() != null) && (minHeight.get() != null)
+        return ((maxHeight.get() != null) && (minHeight.get() != null))
     },
 
 
