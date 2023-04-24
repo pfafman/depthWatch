@@ -66,15 +66,17 @@ Template.hourly.onRendered (() => {
                   color: {
                     pattern: [
                       "#FF0000",
-                      "#F97600",
-                      "#F6C600",
-                      "#60B044"
+                      "#FFFF00",
+                      "#FFA500",
+                      "#0055B3",
+                      "#00FF00"
                     ],
                     threshold: {
                       values: [
-                        25,
-                        50,
-                        75,
+                         20,
+                         40,
+                         50,
+                         75,
                         100
                       ]
                     }
