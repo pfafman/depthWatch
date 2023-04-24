@@ -73,11 +73,11 @@ Template.hourly.onRendered (() => {
                     ],
                     threshold: {
                       values: [
-                         20,
-                         40,
-                         50,
-                         75,
-                        100
+                        15,
+                        25,
+                        50,
+                        75,
+                        90
                       ]
                     }
                   },
