@@ -1,5 +1,5 @@
 
-import bb, {area, candlestick, step} from "billboard.js";
+import bb, {area, candlestick, step, bar, line, spline} from "billboard.js";
 import { Depths } from '../../../api/depths/depths.js';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
@@ -28,6 +28,7 @@ Template.daily.onRendered (() => {
             
             let times = ["times"];
             let data = ["Gallons"]
+            let change = ["Gallons"]
             factor = capacity / maxDepth;
             results.forEach( depth => {
                 //console.log(depth);
@@ -38,16 +39,17 @@ Template.daily.onRendered (() => {
                     Math.round((maxDepth - depth.max )  * factor),
                     Math.round((maxDepth - depth.exit ) * factor)
                     ]);
+                change.push(Math.round((depth.enter - depth.exit) * factor))
             });
 
-           var chart = bb.generate({
+            var chart = bb.generate({
                 data: {
                     x: "times",
                     columns: [
                         times,
                         data
                     ],
-                    type: candlestick(),       // for ESM specify as: candlestick()
+                    type: candlestick(),
                     colors: {
                         'Depth': "green"
                     },
@@ -79,6 +81,44 @@ Template.daily.onRendered (() => {
                 bindto: "#dailyChart"
             });
         
+            var chart = bb.generate({
+                data: {
+                    x: "times",
+                    columns: [
+                        times,
+                        change
+                    ],
+                    type: bar(),
+                    colors: {
+                        'Depth': "green"
+                    },
+                    labels: false
+                },
+                candlestick: {
+                    color: {
+                      down: "red"
+                    },
+                    width: {
+                      ratio: 0.5
+                    }
+                },
+                axis: {
+                    x: {
+                        type: "timeseries",
+                        tick: {
+                            format: "%m/%d/%y"
+                        },
+                        padding: {
+                            left: 1,
+                            right: 1
+                        }
+                    }
+                },
+                size: {
+                    height: 200
+                },
+                bindto: "#dailyChangeChart"
+            });
         }
     });
 
