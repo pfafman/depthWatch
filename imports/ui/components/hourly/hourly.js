@@ -142,6 +142,9 @@ Template.hourly.onRendered (() => {
                             left: 1,
                             right: 1
                         }
+                    },
+                    y2: {
+                        show: true
                     }
                 },
                 size: {
