@@ -122,7 +122,7 @@ Template.hourly.onRendered (() => {
                     colors: {
                         'Depth': "green"
                     },
-                    labels: true
+                    labels: false
                 },
                 candlestick: {
                     color: {
