@@ -1,4 +1,4 @@
 
 
 maxDepth = 57;
-capacity = 3250*3 - 3*250;  // Gallons Actual is 3250 * 3
+capacity = 3*(3236 - 236);  // Gallons Actual is 3236* 3
