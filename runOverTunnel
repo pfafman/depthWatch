@@ -8,4 +8,4 @@ export FORCE_SSL=1
 export TOOL_NODE_FLAGS="--no-expose-gc --max-old-space-size=8192 --optimize_for_size --gc-interval=100" 
 
 
-meteor run -p 3000 --exclude-archs web.browser.legacy
+WARN_WHEN_USING_OLD_API=true meteor run -p 3000 --exclude-archs web.browser.legacy
