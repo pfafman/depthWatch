@@ -29,7 +29,7 @@ Template.daily.onRendered (() => {
             let times = ["times"];
             let data = ["Gallons"]
             let change = ["Gallons"]
-            factor = capacity / maxDepth;
+            factor = gallonsPerInch; //capacity / maxDepth;
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);

@@ -98,7 +98,7 @@ Template.hourly.onRendered (() => {
             
             let times = ["times"];
             let data = ["Gallons"];
-            factor = capacity / maxDepth;
+            factor = gallonsPerInch; // capacity / maxDepth;
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);
@@ -213,7 +213,7 @@ Template.hourly.helpers({
     gallons() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  (maxDepth - current.exit)/maxDepth * capacity;
+            const gallons =  (maxDepth - current.exit) * gallonsPerInch; // /maxDepth * capacity;
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -226,7 +226,7 @@ Template.hourly.helpers({
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(48, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
                 //console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
-                let gallons =  - (current.exit - oldest.exit)/maxDepth * capacity;
+                let gallons =  - (current.exit - oldest.exit) * gallonsPerInch; // /maxDepth * capacity;
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
