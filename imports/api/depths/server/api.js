@@ -25,6 +25,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
 
     if (depth < 8) {
       // Tank is maxed out
+      console.log("insertDepth: tank is at max", depth);
       depth = 8;
       overCapacity = true;
     } else {
