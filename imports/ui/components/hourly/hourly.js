@@ -33,9 +33,9 @@ Template.hourly.onRendered (() => {
 
             if (current != null) {
                 
-                const percent = 100*(newMaxDepth - current.exit)/newMaxDepth;
-                const min = 100*(newMaxDepth - range[0].max)/newMaxDepth;
-                const max = 100*(newMaxDepth - range[0].min)/newMaxDepth;
+                const percent = 100*(newMaxDepth - current.exit)/tankDepth;
+                const min = 100*(newMaxDepth - range[0].max)/tankDepth;
+                const max = 100*(newMaxDepth - range[0].min)/tankDepth;
                 minHeight.set(newMaxDepth - range[0].max);
                 maxHeight.set(newMaxDepth - range[0].min);
 
@@ -221,6 +221,15 @@ Template.hourly.helpers({
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
+        }
+    },
+
+    overCapacity() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.overCapacity;
+        } else {
+            return false;
         }
     },
 
