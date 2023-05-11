@@ -18,9 +18,17 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     
     let depth = Math.round(Number(this.bodyParams.depth)*10)/10;
 
-    if ((depth > 57) || (depth < 0)) {
+    if ((depth > 67) || (depth <= 1)) {
       console.log("insertDepth: bad value", depth);
       return {status: 'bad value'};
+    }
+
+    if (depth < 8) {
+      // Tank is maxed out
+      depth = 8;
+      overCapacity = true;
+    } else {
+      overCapacity = false;
     }
 
     console.log("insertDepth", depth);
@@ -48,14 +56,19 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       rec['exit'] = depth;
       if (depth > rec['max'] ) rec['max'] = depth;
       if (depth < rec['min'] ) rec['min'] = depth;
+      if (rec['overCapacity'] == null) {
+        rec['overCapacity'] = false;
+      }
+      rec['overCapacity'] = overCapacity || rec['overCapacity']
       delete rec['_id']
     } else {
       rec = {
-        'time'  : time,
-        'enter' : depth,
-        'max'   : depth,
-        'min'   : depth,
-        'exit'  : depth
+        'time'         : time,
+        'enter'        : depth,
+        'max'          : depth,
+        'min'          : depth,
+        'exit'         : depth,
+        'overCapacity' : overCapacity
       }
     }
 

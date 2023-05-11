@@ -33,11 +33,18 @@ Template.daily.onRendered (() => {
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);
+                
+                if (moment(depth.time).isBefore(moment("2023-05-10"))) {
+                    theMaxDepth = maxDepth;
+                } else {
+                    theMaxDepth = newMaxDepth;
+                }
+
                 data.push([
-                    Math.round((maxDepth - depth.enter) * factor), 
-                    Math.round((maxDepth - depth.min)   * factor),
-                    Math.round((maxDepth - depth.max )  * factor),
-                    Math.round((maxDepth - depth.exit ) * factor)
+                    Math.round((theMaxDepth - depth.enter) * factor), 
+                    Math.round((theMaxDepth - depth.min)   * factor),
+                    Math.round((theMaxDepth - depth.max )  * factor),
+                    Math.round((theMaxDepth - depth.exit ) * factor)
                     ]);
                 change.push(Math.round((depth.enter - depth.exit) * factor))
             });

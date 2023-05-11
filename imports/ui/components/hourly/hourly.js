@@ -33,11 +33,11 @@ Template.hourly.onRendered (() => {
 
             if (current != null) {
                 
-                const percent = 100*(maxDepth - current.exit)/maxDepth;
-                const min = 100*(maxDepth - range[0].max)/maxDepth;
-                const max = 100*(maxDepth - range[0].min)/maxDepth;
-                minHeight.set(maxDepth - range[0].max);
-                maxHeight.set(maxDepth - range[0].min);
+                const percent = 100*(newMaxDepth - current.exit)/newMaxDepth;
+                const min = 100*(newMaxDepth - range[0].max)/newMaxDepth;
+                const max = 100*(newMaxDepth - range[0].min)/newMaxDepth;
+                minHeight.set(newMaxDepth - range[0].max);
+                maxHeight.set(newMaxDepth - range[0].min);
 
                 var gaugeChart = bb.generate({
                   data: {
@@ -98,15 +98,21 @@ Template.hourly.onRendered (() => {
             
             let times = ["times"];
             let data = ["Gallons"];
-            factor = gallonsPerInch; // capacity / maxDepth;
+            factor = gallonsPerInch; // capacity / newMaxDepth;
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);
+                if (moment(depth.time).isBefore(moment("2023-05-10"))) {
+                    theMaxDepth = maxDepth;
+                } else {
+                    theMaxDepth = newMaxDepth;
+                }
+
                 data.push([
-                    Math.round((maxDepth - depth.enter) * factor), 
-                    Math.round((maxDepth - depth.min)   * factor),
-                    Math.round((maxDepth - depth.max )  * factor),
-                    Math.round((maxDepth - depth.exit ) * factor)
+                    Math.round((theMaxDepth - depth.enter) * factor), 
+                    Math.round((theMaxDepth - depth.min)   * factor),
+                    Math.round((theMaxDepth - depth.max )  * factor),
+                    Math.round((theMaxDepth - depth.exit ) * factor)
                     ]);
             });
 
@@ -178,7 +184,7 @@ Template.hourly.helpers({
     currentHeight() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const height = (maxDepth - current.exit);
+            const height = (newMaxDepth - current.exit);
             return height.toFixed(1);
         } else {
             return "N/A";
@@ -201,8 +207,6 @@ Template.hourly.helpers({
     age() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            //const percent = 100*(maxDepth - current.exit)/maxDepth;
-            //const age = moment.duration(moment().diff(current.time)).humanize()
             time = moment(current.time).format('llll');
             return `at ${time}`;
         } else {
@@ -213,7 +217,7 @@ Template.hourly.helpers({
     gallons() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  (maxDepth - current.exit) * gallonsPerInch; // /maxDepth * capacity;
+            const gallons =  (newMaxDepth - current.exit) * gallonsPerInch;
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -225,8 +229,7 @@ Template.hourly.helpers({
         if (current != null) {
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(48, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
-                //console.log(`${maxDepth - current.exit} - ${maxDepth - oldest.exit}`, (current.exit - oldest.exit)/maxDepth * capacity);
-                let gallons =  - (current.exit - oldest.exit) * gallonsPerInch; // /maxDepth * capacity;
+                let gallons =  - (current.exit - oldest.exit) * gallonsPerInch;
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
