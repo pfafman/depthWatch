@@ -17,6 +17,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     check(this.bodyParams.depth, Number);
     
     let depth = Math.round(Number(this.bodyParams.depth)*10)/10;
+    let reading = depth;
 
     if ((depth > 67) || (depth <= 1)) {
       console.log("insertDepth: bad value", depth);
@@ -57,6 +58,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       rec['exit'] = depth;
       if (depth > rec['max'] ) rec['max'] = depth;
       if (depth < rec['min'] ) rec['min'] = depth;
+      if (reading < rec['minReading'] ) rec['minReading'] = reading;
       if (rec['overCapacity'] == null) {
         rec['overCapacity'] = false;
       }
@@ -68,6 +70,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
         'enter'        : depth,
         'max'          : depth,
         'min'          : depth,
+        'minReading'   : reading,
         'exit'         : depth,
         'overCapacity' : overCapacity
       }
