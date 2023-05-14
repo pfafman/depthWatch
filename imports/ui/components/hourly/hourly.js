@@ -181,6 +181,15 @@ Template.hourly.helpers({
         }
     },
 
+    currentReading() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current.overCapacity)) {
+            return current.minReading.toFixed(1);
+        } else {
+            return "";
+        }
+    },
+
     currentHeight() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
