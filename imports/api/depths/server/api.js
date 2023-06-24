@@ -41,8 +41,8 @@ Api.addRoute('insertDepth', {authRequired: false}, {
 
       if (lastRec != null) {
         console.log("insertDepth: new depth", lastRec.exit, '->', depth);
-        let age = moment().diff(lastRec.time, 'hours');
-        if ((age < 1) && Math.abs(depth-lastRec.exit) > .5) {
+        let age = moment().diff(lastRec.time, 'minutes');
+        if ((age < 10) && Math.abs(depth-lastRec.exit) > .5) {
           console.log("insertDepth: large change", depth, "<>", lastRec.exit);
           return {status: 'bad value'};
         }
