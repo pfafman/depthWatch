@@ -44,12 +44,12 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       if (lastRec != null) {
         console.log("insertDepth: new depth", lastRec.exit, '->', depth);
         let age = moment().diff(lastRec.time, 'minutes');
-        if ((age < 1) && Math.abs(depth-lastRec.exit) > 1) {   // If less than 1 minute and change more than an inch skip load!!!
-          console.log("insertDepth: large change", depth, "<>", lastRec.exit);
-          console.log('Return bad value ...');
-          console.log("");
-          return {status: 'bad value'};
-        }
+        // if ((age < 1) && Math.abs(depth-lastRec.exit) > 1) {   // If less than 1 minute and change more than an inch skip load!!!
+        //   console.log("insertDepth: large change", depth, "<>", lastRec.exit);
+        //   console.log('Return bad value ...');
+        //   console.log("");
+        //   return {status: 'bad value'};
+        // }
       }
     } catch (error) {
       console.log("insertDepth: error on last check", error);
