@@ -21,6 +21,8 @@ Api.addRoute('insertDepth', {authRequired: false}, {
 
     if ((depth > 67) || (depth <= 1)) {
       console.log("insertDepth: bad value", depth);
+      console.log('Return bad value ...');
+      console.log("");
       return {status: 'bad value'};
     }
 
@@ -44,6 +46,8 @@ Api.addRoute('insertDepth', {authRequired: false}, {
         let age = moment().diff(lastRec.time, 'minutes');
         if ((age < 10) && Math.abs(depth-lastRec.exit) > .5) {
           console.log("insertDepth: large change", depth, "<>", lastRec.exit);
+          console.log('Return bad value ...');
+          console.log("");
           return {status: 'bad value'};
         }
       }
@@ -83,6 +87,8 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       '$set': rec
     });
 
+    console.log("ok");
+    console.log("");
     return {status: 'ok'};
   }
 })
