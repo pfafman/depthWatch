@@ -264,6 +264,28 @@ Template.hourly.helpers({
         }
     },
 
+    change4() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(4, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
+            if ((current != null) && (oldest != null)) {
+                let gallons =  - (current.exit - oldest.exit) * gallonsPerInch;
+                const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
+                if (gallons < 0) {
+                    trend = "Down";
+                    gallons = - gallons;
+                } else {
+                    trend = "Up";
+                }
+                return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
+    },
+
     capacity() {
         return capacity.toLocaleString('us', {maximumFractionDigits: 0})
     }
