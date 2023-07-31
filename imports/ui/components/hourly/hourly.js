@@ -277,7 +277,8 @@ Template.hourly.helpers({
                 } else {
                     trend = "Up";
                 }
-                return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
+                let gpm = gallons / moment(current.time).diff(moment(oldest.time), 'minutes');
+                return `${trend} ${gallons.toFixed(1)} gallons in ${duration} (${gpm.toFixed(1)} GPM)`;
             } else {
                 return "";
             }

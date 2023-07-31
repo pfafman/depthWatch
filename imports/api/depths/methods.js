@@ -134,6 +134,19 @@ Meteor.methods({
     ]
 
     return Depths.aggregate(pipeline, {});
+  },
+
+
+  'status' () {
+    const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+    //console.log(current);
+    const age = moment().diff(moment(current.time), 'minutes');
+    console.log("Last read", age,'minutes ago');
+    if (age < 5) {
+      return 'ok';
+    } else {
+      return 'error'
+    }
   }
 
 });
