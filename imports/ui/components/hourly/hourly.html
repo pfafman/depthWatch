@@ -1,22 +1,23 @@
 <template name="hourly">
 
   {{#if Template.subscriptionsReady}}
-
-    <div class="flow-text current">
-      Current reading is {{currentDepth}} inches down {{age}}
-      {{#if overCapacity}}
-        &nbsp; <a class="btn-floating btn-small pulse yellow"><i class="material-icons">water</i></a>
-        &nbsp; <i class="smaller">Sensor reading is {{currentReading}} inches</i>
-      {{/if}}
-    </div>
-    <div class="flow-text current">
-      {{currentHeight}} inches of water in tank &nbsp;
-      {{#if haveRange}}
-        <span class="range"> &nbsp; Range {{minHeight}} -> {{maxHeight}}</span>
-      {{/if}}
-      <br/>
-      {{gallons}} out of {{capacity}} gallons      
-    </div>
+    {{#if haveCurrentDepth}}
+      <div class="flow-text current">
+        Current reading is {{currentDepth}} inches down {{age}}
+        {{#if overCapacity}}
+          &nbsp; <a class="btn-floating btn-small pulse yellow"><i class="material-icons">water</i></a>
+          &nbsp; <i class="smaller">Sensor reading is {{currentReading}} inches</i>
+        {{/if}}
+      </div>
+      <div class="flow-text current">
+        {{currentHeight}} inches of water in tank &nbsp;
+        {{#if haveRange}}
+          <span class="range"> &nbsp; Range {{minHeight}} -> {{maxHeight}}</span>
+        {{/if}}
+        <br/>
+        {{gallons}} out of {{capacity}} gallons      
+      </div>
+    {{/if}}
     
     <div id="gaugeChart"></div>
 

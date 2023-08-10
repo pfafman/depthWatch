@@ -13,6 +13,8 @@ import './hourly.html';
 const minHeight = new ReactiveVar(null);
 const maxHeight = new ReactiveVar(null);
 
+
+
 Template.hourly.onCreated (() => {
     console.log("hourly.onCreated");
     Meteor.subscribe('depths.last48');
@@ -22,7 +24,8 @@ Template.hourly.onCreated (() => {
 Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
-        console.log(`hourly: Found ${Depths.find({}).count()} measurements`)
+        console.log(`hourly: Found ${Depths.find({}).count()} measurements`);
+
         if (Depths.find({}).count() > 0) {
 
             current = Depths.findOne({},{ sort: {time: -1}, limit:1 })
@@ -87,82 +90,83 @@ Template.hourly.onRendered (() => {
                   bindto: "#gaugeChart"
                 });
             }
-
-
-            //console.log("update daily ...", Depths.find({}).count());
-
-            const results = await Meteor.callAsync('hourDepths');
-            //const results = Depths.find({}, {sort: {time: 1}});
-
-            console.log("update daily", results.length);
-            
-            let times = ["times"];
-            let data = ["Gallons"];
-            factor = gallonsPerInch; // capacity / newMaxDepth;
-            results.forEach( depth => {
-                //console.log(depth);
-                times.push(depth.time);
-                if (moment(depth.time).isBefore(moment("2023-05-10"))) {
-                    theMaxDepth = maxDepth;
-                } else {
-                    theMaxDepth = newMaxDepth;
-                }
-
-                data.push([
-                    Math.round((theMaxDepth - depth.enter) * factor), 
-                    Math.round((theMaxDepth - depth.min)   * factor),
-                    Math.round((theMaxDepth - depth.max )  * factor),
-                    Math.round((theMaxDepth - depth.exit ) * factor)
-                    ]);
-            });
-
-            console.log("Generate Chart");
-            var chart = bb.generate({
-                data: {
-                    x: "times",
-                    columns: [
-                        times,
-                        data
-                    ],
-                    type: candlestick(),       // for ESM specify as: candlestick()
-                    colors: {
-                        'Depth': "green"
-                    },
-                    labels: false
-                },
-                candlestick: {
-                    color: {
-                      down: "red"
-                    },
-                    width: {
-                      ratio: 0.5
-                    }
-                },
-                axis: {
-                    x: {
-                        type: "timeseries",
-                        tick: {
-                            format: "%I:00 %p"
-                        },
-                        padding: {
-                            left: 1,
-                            right: 1
-                        }
-                    },
-                    y2: {
-                        show: true
-                    }
-                },
-                size: {
-                    height: 200
-                },
-                bindto: "#hourlyChart"
-            });
-        
         }
-    });    
+    });
 
+    Tracker.autorun(async () => {
+
+        console.log("call hourly...");
+        const results = await Meteor.callAsync('hourDepths');
+        console.log("update hourly", results.length);
+        
+        let times = ["times"];
+        let data = ["Gallons"];
+        factor = gallonsPerInch; // capacity / newMaxDepth;
+        results.forEach( depth => {
+            //console.log(depth);
+            times.push(depth.time);
+            if (moment(depth.time).isBefore(moment("2023-05-10"))) {
+                theMaxDepth = maxDepth;
+            } else {
+                theMaxDepth = newMaxDepth;
+            }
+
+            data.push([
+                Math.round((theMaxDepth - depth.enter) * factor), 
+                Math.round((theMaxDepth - depth.min)   * factor),
+                Math.round((theMaxDepth - depth.max )  * factor),
+                Math.round((theMaxDepth - depth.exit ) * factor)
+                ]);
+        });
+
+        console.log("Generate Chart");
+        var chart = bb.generate({
+            data: {
+                x: "times",
+                columns: [
+                    times,
+                    data
+                ],
+                type: candlestick(),       // for ESM specify as: candlestick()
+                colors: {
+                    'Depth': "green"
+                },
+                labels: false
+            },
+            candlestick: {
+                color: {
+                  down: "red"
+                },
+                width: {
+                  ratio: 0.5
+                }
+            },
+            axis: {
+                x: {
+                    type: "timeseries",
+                    tick: {
+                        format: "%I:00 %p"
+                    },
+                    padding: {
+                        left: 1,
+                        right: 1
+                    }
+                },
+                y2: {
+                    show: true
+                }
+            },
+            size: {
+                height: 200
+            },
+            bindto: "#hourlyChart"
+        });
+    
+    });
 });
+    
+
+
 
 
 Template.hourly.helpers({
@@ -170,6 +174,13 @@ Template.hourly.helpers({
     depths() {
         return Depths.find({})
     },
+
+
+    haveCurrentDepth() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        return (current != null);
+    },
+
 
     currentDepth() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
