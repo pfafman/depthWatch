@@ -5,7 +5,7 @@ import '../both';
 // Import needed templates
 import '../../ui/layouts/body/body.js';
 import '../../ui/pages/home/home.js';
-import '../../ui/pages/status/status.js';
+//import '../../ui/pages/status/status.js';
 import '../../ui/pages/not-found/not-found.js';
 
 console.log("Version", VERSION);
@@ -18,13 +18,13 @@ FlowRouter.route('/', {
   },
 });
 
-// Status page
-FlowRouter.route('/status', {
-  name: 'status',
-  action() {
-    this.render('status');
-  },
-});
+// // Status page
+// FlowRouter.route('/status', {
+//   name: 'status',
+//   action() {
+//     this.render('status');
+//   },
+// });
 
 // Create 404 route (catch-all)
 FlowRouter.route('*', {
