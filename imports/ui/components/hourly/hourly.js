@@ -13,6 +13,7 @@ import './hourly.html';
 const minHeight = new ReactiveVar(null);
 const maxHeight = new ReactiveVar(null);
 
+let hourDepthsRunning = false;
 
 
 Template.hourly.onCreated (() => {
@@ -95,72 +96,76 @@ Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
 
-        console.log("call hourly...");
-        const results = await Meteor.callAsync('hourDepths');
-        console.log("update hourly", results.length);
-        
-        let times = ["times"];
-        let data = ["Gallons"];
-        factor = gallonsPerInch; // capacity / newMaxDepth;
-        results.forEach( depth => {
-            //console.log(depth);
-            times.push(depth.time);
-            if (moment(depth.time).isBefore(moment("2023-05-10"))) {
-                theMaxDepth = maxDepth;
-            } else {
-                theMaxDepth = newMaxDepth;
-            }
-
-            data.push([
-                Math.round((theMaxDepth - depth.enter) * factor), 
-                Math.round((theMaxDepth - depth.min)   * factor),
-                Math.round((theMaxDepth - depth.max )  * factor),
-                Math.round((theMaxDepth - depth.exit ) * factor)
-                ]);
-        });
-
-        console.log("Generate Chart");
-        var chart = bb.generate({
-            data: {
-                x: "times",
-                columns: [
-                    times,
-                    data
-                ],
-                type: candlestick(),       // for ESM specify as: candlestick()
-                colors: {
-                    'Depth': "green"
-                },
-                labels: false
-            },
-            candlestick: {
-                color: {
-                  down: "red"
-                },
-                width: {
-                  ratio: 0.5
+        if ((Depths.find({}).count() > 0) && (!hourDepthsRunning)) {
+            console.log("call hourly...");
+            hourDepthsRunning = true;
+            const results = await Meteor.callAsync('hourDepths');
+            console.log("update hourly", results.length);
+            
+            let times = ["times"];
+            let data = ["Gallons"];
+            factor = gallonsPerInch; // capacity / newMaxDepth;
+            results.forEach( depth => {
+                //console.log(depth);
+                times.push(depth.time);
+                if (moment(depth.time).isBefore(moment("2023-05-10"))) {
+                    theMaxDepth = maxDepth;
+                } else {
+                    theMaxDepth = newMaxDepth;
                 }
-            },
-            axis: {
-                x: {
-                    type: "timeseries",
-                    tick: {
-                        format: "%I:00 %p"
+
+                data.push([
+                    Math.round((theMaxDepth - depth.enter) * factor), 
+                    Math.round((theMaxDepth - depth.min)   * factor),
+                    Math.round((theMaxDepth - depth.max )  * factor),
+                    Math.round((theMaxDepth - depth.exit ) * factor)
+                    ]);
+            });
+
+            console.log("Generate Chart");
+            var chart = bb.generate({
+                data: {
+                    x: "times",
+                    columns: [
+                        times,
+                        data
+                    ],
+                    type: candlestick(),       // for ESM specify as: candlestick()
+                    colors: {
+                        'Depth': "green"
                     },
-                    padding: {
-                        left: 1,
-                        right: 1
+                    labels: false
+                },
+                candlestick: {
+                    color: {
+                      down: "red"
+                    },
+                    width: {
+                      ratio: 0.5
                     }
                 },
-                y2: {
-                    show: true
-                }
-            },
-            size: {
-                height: 200
-            },
-            bindto: "#hourlyChart"
-        });
+                axis: {
+                    x: {
+                        type: "timeseries",
+                        tick: {
+                            format: "%I:00 %p"
+                        },
+                        padding: {
+                            left: 1,
+                            right: 1
+                        }
+                    },
+                    y2: {
+                        show: true
+                    }
+                },
+                size: {
+                    height: 200
+                },
+                bindto: "#hourlyChart"
+            });
+            hourDepthsRunning = false;
+        }
     
     });
 });
