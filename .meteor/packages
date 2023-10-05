@@ -20,7 +20,6 @@ shell-server@0.5.0            # Server-side component of the `meteor shell` comm
 ostrio:flow-router-extra      # FlowRouter is a very simple router for Meteor
 
 johanbrook:publication-collector  # Test a Meteor publication by collecting its output
-fourseven:scss
 blaze-html-templates
 pfafman:restivus
 sakulstra:aggregate
