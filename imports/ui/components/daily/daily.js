@@ -34,19 +34,15 @@ Template.daily.onRendered (() => {
                 //console.log(depth);
                 times.push(depth.time);
                 
-                if (moment(depth.time).isBefore(moment("2023-05-10"))) {
-                    theMaxDepth = maxDepth;
-                } else {
-                    theMaxDepth = newMaxDepth;
-                }
+                let diff = gallonsInTanks(depth.enter, depth.time) - gallonsInTanks(depth.exit,  depth.time);
 
                 data.push([
-                    Math.round((theMaxDepth - depth.enter) * factor), 
-                    Math.round((theMaxDepth - depth.min)   * factor),
-                    Math.round((theMaxDepth - depth.max )  * factor),
-                    Math.round((theMaxDepth - depth.exit ) * factor)
+                    gallonsInTanks(depth.enter, depth.time),
+                    gallonsInTanks(depth.min,   depth.time),
+                    gallonsInTanks(depth.max,   depth.time),
+                    gallonsInTanks(depth.exit,  depth.time)
                     ]);
-                change.push(Math.round((depth.enter - depth.exit) * factor))
+                change.push(diff)
             });
 
             var chart = bb.generate({

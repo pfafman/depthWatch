@@ -108,17 +108,12 @@ Template.hourly.onRendered (() => {
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);
-                if (moment(depth.time).isBefore(moment("2023-05-10"))) {
-                    theMaxDepth = maxDepth;
-                } else {
-                    theMaxDepth = newMaxDepth;
-                }
 
                 data.push([
-                    Math.round((theMaxDepth - depth.enter) * factor), 
-                    Math.round((theMaxDepth - depth.min)   * factor),
-                    Math.round((theMaxDepth - depth.max )  * factor),
-                    Math.round((theMaxDepth - depth.exit ) * factor)
+                    gallonsInTanks(depth.enter, depth.time),
+                    gallonsInTanks(depth.min,   depth.time),
+                    gallonsInTanks(depth.max,   depth.time),
+                    gallonsInTanks(depth.exit,  depth.time)
                     ]);
             });
 
@@ -242,7 +237,7 @@ Template.hourly.helpers({
     gallons() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  (newMaxDepth - current.exit) * gallonsPerInch;
+            const gallons =  gallonsInTanks(current.exit, current.time);
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -263,7 +258,7 @@ Template.hourly.helpers({
         if (current != null) {
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(48, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
-                let gallons =  - (current.exit - oldest.exit) * gallonsPerInch;
+                let gallons =  - (gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time) );
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
@@ -285,7 +280,7 @@ Template.hourly.helpers({
         if (current != null) {
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(4, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
-                let gallons =  - (current.exit - oldest.exit) * gallonsPerInch;
+                let gallons =  - (gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time) ); 
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
