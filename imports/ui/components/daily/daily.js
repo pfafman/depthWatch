@@ -34,7 +34,7 @@ Template.daily.onRendered (() => {
                 //console.log(depth);
                 times.push(depth.time);
                 
-                let diff = gallonsInTanks(depth.enter, depth.time) - gallonsInTanks(depth.exit,  depth.time);
+                let diff = gallonsInTanks(depth.exit,  depth.time) - gallonsInTanks(depth.enter, depth.time);
 
                 data.push([
                     gallonsInTanks(depth.enter, depth.time),
