@@ -16,7 +16,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
 
     check(this.bodyParams.depth, Number);
     
-    let depth = Math.round(Number(this.bodyParams.depth));
+    let depth = Math.round(Number(this.bodyParams.depth)*100.0)/100;
     let reading = depth;
 
     if ((depth > 67) || (depth <= 1)) {
