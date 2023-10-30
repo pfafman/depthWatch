@@ -244,6 +244,17 @@ Template.hourly.helpers({
         }
     },
 
+    down() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            const down =  capacity - gallonsInTanks(current.exit, current.time);
+            return down.toLocaleString('us', {maximumFractionDigits: 0})
+        } else {
+            return "";
+        }
+    },
+
+
     overCapacity() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
