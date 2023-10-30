@@ -63,7 +63,7 @@ Meteor.methods({
         {
           $match: { 'time' :
             {
-              $gt: moment().subtract(2, 'days').startOf('day').toDate()
+              $gt: moment().subtract(7, 'days').startOf('day').toDate()
             }
           }
         },
