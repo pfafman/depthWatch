@@ -300,7 +300,7 @@ Template.hourly.helpers({
     change4() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(4, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
+            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
                 console.log("change4", oldest.exit, "->", current.exit);
                 let gallons =  gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time); 
