@@ -255,6 +255,16 @@ Template.hourly.helpers({
     },
 
 
+    isDown() {
+        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        if ((current != null)  && (gallonsInTanks(current.exit, current.time) < capacity)) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+
     overCapacity() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
