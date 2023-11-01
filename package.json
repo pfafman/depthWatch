@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.1",
-    "@materializecss/materialize": "^2.0.3-alpha",
+    "@materializecss/materialize": "^2.0.3-beta",
     "billboard.js": "^3.10.2",
     "d3": "^7.8.5",
     "jquery": "^3.7.1",
