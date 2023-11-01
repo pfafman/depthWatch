@@ -1,18 +1,18 @@
 import moment from 'moment';
 
-const tankDepth = 59;
-const tankCapacity = 3236;
+tankDepth = 59;
+tankCapacity = 3236;
 
-const gallonsPerInch = 3 * tankCapacity/tankDepth;
+gallonsPerInch = 3 * tankCapacity/tankDepth;
 
-const gallonsPerInchAbove19 = 57.6;
+gallonsPerInchAbove19 = 57.6;
 
-const maxDepth    = 57;   // Where Sensor was
-const newMaxDepth = 67;   // Where Sensor is
+maxDepth    = 57;   // Where Sensor was
+newMaxDepth = 67;   // Where Sensor is
 
-const minValidReading = 67 - 59;  // 8 inches
+minValidReading = 67 - 59;  // 8 inches
 
-const capacity = tankCapacity * 3 + 11*1.36*2;
+capacity = tankCapacity * 3 + 11*1.36*2;
 
 gallonsInTanks = (sensorReading, time) => {
     let gallons = tankCapacity * 3 + 11*1.36*2;
