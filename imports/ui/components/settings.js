@@ -1,27 +1,25 @@
 import moment from 'moment';
 
-tankDepth = 59;
-tankCapacity = 3236;
+const tankDepth = 59;
+const tankCapacity = 3236;
 
-gallonsPerInch = 3 * tankCapacity/tankDepth;
+const gallonsPerInch = 3 * tankCapacity/tankDepth;
 
-gallonsPerInchAbove19 = 57.6;
+const gallonsPerInchAbove19 = 57.6;
 
-maxDepth = 57;   // Where Sensor was
+const maxDepth    = 57;   // Where Sensor was
+const newMaxDepth = 67;   // Where Sensor is
 
-newMaxDepth = 67;   // Where Sensor is
+const minValidReading = 67 - 59;  // 8 inches
 
-minValidReading = 67 - 59;  // 8 inches
-
-fudge = 0;
-capacity = 9739;  // Gallons Actual is 3236* 3
+const capacity = tankCapacity * 3 + 11*1.36*2;
 
 gallonsInTanks = (sensorReading, time) => {
     let gallons = tankCapacity * 3 + 11*1.36*2;
+    let theMaxDepth = newMaxDepth;
+
     if (moment(time).isBefore(moment("2023-05-10"))) {
         theMaxDepth = maxDepth;
-    } else {
-        theMaxDepth = newMaxDepth;
     }
 
     if (sensorReading < 8) {
