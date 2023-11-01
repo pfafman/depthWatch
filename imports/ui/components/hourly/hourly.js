@@ -38,7 +38,7 @@ Template.hourly.onRendered (() => {
             if (current != null) {
                 
                 const percent = 100*(newMaxDepth - current.exit)/tankDepth;
-                const min = 100*(maxDepth - range[0].max)/tankDepth;
+                const min = 100*(newMaxDepth - range[0].max)/tankDepth;
                 const max = 100*(newMaxDepth - range[0].min)/tankDepth;
                 minHeight.set(newMaxDepth - range[0].max);
                 maxHeight.set(newMaxDepth - range[0].min);
