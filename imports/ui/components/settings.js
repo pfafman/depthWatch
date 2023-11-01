@@ -12,7 +12,7 @@ newMaxDepth = 67;   // Where Sensor is
 
 minValidReading = 67 - 59;  // 8 inches
 
-capacity = tankCapacity * 3; + gallonsPerInchAbove9; //11*1.36*2;
+capacity = tankCapacity * 3; //+ gallonsPerInchAbove9; //11*1.36*2;
 
 gallonsInTanks = (sensorReading, time) => {
     let gallons = capacity;
