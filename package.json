@@ -6,12 +6,12 @@
     "test": "meteor test --once --driver-package meteortesting:mocha"
   },
   "dependencies": {
-    "@babel/runtime": "^7.23.4",
+    "@babel/runtime": "^7.23.5",
     "@materializecss/materialize": "^2.0.3-beta",
     "billboard.js": "^3.10.3",
     "d3": "^7.8.5",
     "jquery": "^3.7.1",
-    "meteor-node-stubs": "^1.2.5",
+    "meteor-node-stubs": "^1.2.7",
     "moment": "^2.29.4",
     "pinst": "^3.0.0"
   },
