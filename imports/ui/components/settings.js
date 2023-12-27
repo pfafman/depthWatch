@@ -12,6 +12,8 @@ minValidReading = 67 - 59;  // 8 inches
 
 capacity = tankCapacity * 3; 
 
+offset = 0.5*gallonsPerInch*2/3;
+
 gallonsInTanks = (sensorReading, time) => {
     let gallons = capacity;
     let theMaxDepth = newMaxDepth;
@@ -23,7 +25,7 @@ gallonsInTanks = (sensorReading, time) => {
     if (sensorReading < 8) {
         gallons = capacity;
     } else {
-        gallons = (theMaxDepth-sensorReading) * gallonsPerInch;
+        gallons = (theMaxDepth-sensorReading) * gallonsPerInch + offset;
     }
 
     return Math.round(gallons);
