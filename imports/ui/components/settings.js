@@ -24,6 +24,8 @@ gallonsInTanks = (sensorReading, time) => {
 
     if (sensorReading < 8) {
         gallons = capacity;
+    } else if (sensorReading < 8.5) {
+        gallons = capacity - ((sensorReading - 8) * gallonsPerInch/3);
     } else {
         gallons = (theMaxDepth-sensorReading) * gallonsPerInch + offset;
     }
