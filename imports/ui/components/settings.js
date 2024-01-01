@@ -8,7 +8,7 @@ gallonsPerInch = 3 * tankCapacity/tankDepth;
 oldMaxDepth    = 57;   // Where Sensor was
 newMaxDepth = 67;   // Where Sensor is
 
-minValidReading = 67 - 59;  // 8 inches
+minValidReading = 66.8 - 59;  // 7.8 inches
 
 capacity = tankCapacity * 3; 
 
@@ -22,10 +22,10 @@ gallonsInTanks = (sensorReading, time) => {
         theMaxDepth = oldMaxDepth;
     }
 
-    if (sensorReading < 8) {
+    if (sensorReading < minValidReading) {
         gallons = capacity;
-    } else if (sensorReading < 8.5) {
-        gallons = capacity - ((sensorReading - 8) * gallonsPerInch/3);
+    } else if (sensorReading < minValidReading) {
+        gallons = capacity - ((sensorReading - minValidReading) * gallonsPerInch/3);
     } else {
         gallons = (theMaxDepth-sensorReading) * gallonsPerInch + offset;
     }
