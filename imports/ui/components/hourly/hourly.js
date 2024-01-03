@@ -186,7 +186,7 @@ Template.hourly.helpers({
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             //const percent = 100*(maxDepth - current.exit)/maxDepth;
-            return current.exit.toFixed(1);
+            return current.exit.toFixed(2);
         } else {
             return "N/A";
         }
