@@ -167,8 +167,6 @@ Template.hourly.onRendered (() => {
     
 
 
-
-
 Template.hourly.helpers({
     
     depths() {

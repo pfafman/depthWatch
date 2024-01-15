@@ -7,9 +7,15 @@ import moment from 'moment';
 import './daily.html';
 
 
+const weekOldDepth    = new ReactiveVar(null);
+const weekOldDay      = new ReactiveVar(null);
+const currentDayDepth = new ReactiveVar(null);
+const currentDay      = new ReactiveVar(null);
+
+
 Template.daily.onCreated (() => {
     //console.log("daily.onCreated");
-    //this.change = new ReactiveVar("");
+   
 });
 
 Template.daily.onRendered (() => {
@@ -26,6 +32,8 @@ Template.daily.onRendered (() => {
 
             //console.log("update daily", results.length);
             
+            let now = moment();
+
             let times = ["times"];
             let data = ["Gallons"]
             let change = ["Gallons"]
@@ -43,6 +51,16 @@ Template.daily.onRendered (() => {
                     gallonsInTanks(depth.exit,  depth.time)
                     ]);
                 change.push(diff)
+
+                if (weekOldDepth.get() == null) {
+                    if (moment(depth.time).isAfter(now.subtract(1,'week'))) {
+                        weekOldDepth.set((depth.min+depth.max)/2);
+                        weekOldDay.set(depth.time);
+                    }
+                }
+
+                currentDayDepth.set((depth.max+depth.min)/2);
+                currentDay.set(depth.time);
             });
 
             var chart = bb.generate({
@@ -134,4 +152,15 @@ Template.daily.onRendered (() => {
 });
 
 
-Template.daily.helpers({});
+Template.daily.helpers({
+    trend() {
+        if (weekOldDepth.get() != null) {
+            change = currentDayDepth.get() - weekOldDepth.get();
+            days = moment.duration(moment(currentDay.get()).diff(moment(weekOldDay.get()))).days();
+            let trend = change/days;
+            return `Trend ${trend.toFixed(0)} gallons per day`;
+        } else {
+            return "";
+        }
+    }
+});

@@ -37,6 +37,12 @@ Meteor.methods({
             },
             'exit': {
               $last: "$exit"
+            },
+            'maxAve': {
+              $avg: "$max"
+            },
+            'minAve': {
+              $avg: "$min"
             }
           }
         },
