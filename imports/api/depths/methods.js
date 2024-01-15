@@ -12,8 +12,8 @@ Meteor.methods({
       //console.log("dayDepths: called");
 
       const pipeline = [
-          {
-          $sort : { 'time' : 1 } 
+        {
+          $sort : { time : 1 } 
         },
         {
           $group: {
@@ -43,8 +43,14 @@ Meteor.methods({
             },
             'minAve': {
               $avg: "$min"
+            },
+            'time': {
+              $first: "$time"
             }
           }
+        },
+        {
+           $sort : { time : 1 } 
         },
         {
           $project: {

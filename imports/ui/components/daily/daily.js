@@ -33,7 +33,9 @@ Template.daily.onRendered (() => {
             //console.log("update daily", results.length);
             
             let now = moment();
-
+            let weekAgo = moment().subtract(1,'week');
+            console.log("now", now.toDate(), "last week", weekAgo.toDate());
+            
             let times = ["times"];
             let data = ["Gallons"]
             let change = ["Gallons"]
@@ -53,7 +55,7 @@ Template.daily.onRendered (() => {
                 change.push(diff)
 
                 if (weekOldDepth.get() == null) {
-                    if (moment(depth.time).isAfter(now.subtract(1,'week'))) {
+                    if (moment(depth.time).isAfter(weekAgo)) {
                         weekOldDepth.set((depth.min+depth.max)/2);
                         weekOldDay.set(depth.time);
                     }
@@ -155,10 +157,14 @@ Template.daily.onRendered (() => {
 Template.daily.helpers({
     trend() {
         if (weekOldDepth.get() != null) {
-            change = currentDayDepth.get() - weekOldDepth.get();
+            change = gallonsInTanks(currentDayDepth.get(), currentDay.get()) - 
+                gallonsInTanks(weekOldDepth.get(),currentDay.get(),weekOldDay.get());
+            console.log("Trend", change, currentDay.get(), weekOldDay.get());
+            
             days = moment.duration(moment(currentDay.get()).diff(moment(weekOldDay.get()))).days();
+            console.log("Trend", days, "days", change, currentDay.get(), weekOldDay.get());
             let trend = change/days;
-            return `Trend ${trend.toFixed(0)} gallons per day`;
+            return `Week trend is ${trend.toFixed(0)} gallons per day`;
         } else {
             return "";
         }
