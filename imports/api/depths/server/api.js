@@ -63,6 +63,8 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       if (depth > rec['max'] ) rec['max'] = depth;
       if (depth < rec['min'] ) rec['min'] = depth;
       if (reading < rec['minReading'] ) rec['minReading'] = reading;
+      rec['sum'] += depth;
+      rec['readings']++;
       if (rec['overCapacity'] == null) {
         rec['overCapacity'] = false;
       }
@@ -76,6 +78,8 @@ Api.addRoute('insertDepth', {authRequired: false}, {
         'min'          : depth,
         'minReading'   : reading,
         'exit'         : depth,
+        'sum'          : depth,
+        'readings'     : 1,
         'overCapacity' : overCapacity
       }
     }
