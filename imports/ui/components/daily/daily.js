@@ -168,9 +168,9 @@ Template.daily.helpers({
             let runOutDays = -gallonsInTanks(currentDayDepth.get(), currentDay.get())/trend;
             if (runOutDays > 0) {
                 runOutDate = (moment().add(runOutDays, 'days')).format('MMM Do');
-                return `Week trend is down ${-trend.toFixed(0)} gallons per day (${gallonsAveWeekOld.toFixed(0)} ->  ${gallonsAveCurrent.toFixed(0)}).  Will last to ${runOutDate} at this rate.`;
+                return `Week (${days.toFixed(1)} days) trend is down ${-trend.toFixed(0)} gallons per day (${gallonsAveWeekOld.toFixed(0)} ->  ${gallonsAveCurrent.toFixed(0)}).  Will last to ${runOutDate} at this rate.`;
             } else {
-                return `Week trend is up ${trend.toFixed(0)} gallons per day.`;
+                return `Week (${days.toFixed(1)} days) trend is up ${trend.toFixed(0)} gallons per day.`;
             }
         } else {
             return "";

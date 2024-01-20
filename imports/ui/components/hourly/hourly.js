@@ -272,10 +272,10 @@ Template.hourly.helpers({
         }
     },
 
-    change() {
+    change1() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(5, 'days').toDate()}},{ sort: {time: 1}, limit:1 });
+            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'days').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
                 console.log("change", oldest.exit, "->", current.exit, gallonsInTanks(oldest.exit, oldest.time), '->', gallonsInTanks(current.exit, current.time));
                 let gallons =  gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time);
@@ -295,7 +295,7 @@ Template.hourly.helpers({
         }
     },
 
-    change4() {
+    change2() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
