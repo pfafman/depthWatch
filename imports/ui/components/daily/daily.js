@@ -55,7 +55,7 @@ Template.daily.onRendered (() => {
                 change.push(diff)
 
                 if (weekOldDepth.get() == null) {
-                    if (moment(depth.time).isAfter(weekAgo)) {
+                    if (moment(depth.time).isSameOrAfter(weekAgo)) {
                         weekOldDepth.set((depth.min+depth.max)/2);
                         weekOldDay.set(depth.time);
                     }
