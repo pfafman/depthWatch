@@ -13,12 +13,14 @@ import './hourly.html';
 const minHeight = new ReactiveVar(null);
 const maxHeight = new ReactiveVar(null);
 
+const daysOld   = new ReactiveVar(null);
+
 let hourDepthsRunning = false;
 
 
 Template.hourly.onCreated (() => {
     console.log("hourly.onCreated");
-    Meteor.subscribe('depths.last5Days');
+    Meteor.subscribe('depths.lastDays');
 });
 
 
@@ -101,11 +103,14 @@ Template.hourly.onRendered (() => {
             hourDepthsRunning = true;
             const results = await Meteor.callAsync('hourDepths');
             console.log("update hourly", results.length);
+
+            daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Gallons"];
             factor = gallonsPerInch; // capacity / newMaxDepth;
             results.forEach( depth => {
+
                 //console.log(depth);
                 times.push(depth.time);
 
@@ -275,7 +280,9 @@ Template.hourly.helpers({
     change1() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'days').toDate()}},{ sort: {time: 1}, limit:1 });
+            //const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'days').toDate()}},{ sort: {time: 1}, limit:1 });
+            const oldest = daysOld.get();
+            
             if ((current != null) && (oldest != null)) {
                 console.log("change", oldest.exit, "->", current.exit, gallonsInTanks(oldest.exit, oldest.time), '->', gallonsInTanks(current.exit, current.time));
                 let gallons =  gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time);
