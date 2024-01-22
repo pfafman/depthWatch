@@ -18,7 +18,7 @@ let hourDepthsRunning = false;
 
 Template.hourly.onCreated (() => {
     console.log("hourly.onCreated");
-    Meteor.subscribe('depths.last48');
+    Meteor.subscribe('depths.last5Days');
 });
 
 
