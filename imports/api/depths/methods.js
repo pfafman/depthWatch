@@ -108,7 +108,7 @@ Meteor.methods({
           }
         },
         {
-          $sort : { '$_id.day' : 1 } 
+          $sort : { '_id.day' : 1 } 
         },
         {
           $project: {
