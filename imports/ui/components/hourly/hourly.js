@@ -280,7 +280,6 @@ Template.hourly.helpers({
     change1() {
         const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            //const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'days').toDate()}},{ sort: {time: 1}, limit:1 });
             const oldest = daysOld.get();
             
             if ((current != null) && (oldest != null)) {
