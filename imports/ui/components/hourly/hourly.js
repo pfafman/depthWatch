@@ -1,6 +1,6 @@
 
 
-import bb, {area, candlestick, step, gauge} from "billboard.js";
+import bb, {area, candlestick, step, gauge, spline} from "billboard.js";
 import { Depths } from '../../../api/depths/depths.js';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -108,6 +108,7 @@ Template.hourly.onRendered (() => {
             
             let times = ["times"];
             let data = ["Gallons"];
+            let averages = ["averages"];
             factor = gallonsPerInch; // capacity / newMaxDepth;
             results.forEach( depth => {
 
@@ -120,6 +121,7 @@ Template.hourly.onRendered (() => {
                     gallonsInTanks(depth.max,   depth.time),
                     gallonsInTanks(depth.exit,  depth.time)
                     ]);
+                averages.push(depth.sum/depth.readings);
             });
 
             console.log("Generate Chart");
@@ -128,9 +130,13 @@ Template.hourly.onRendered (() => {
                     x: "times",
                     columns: [
                         times,
-                        data
+                        data,
+                        averages
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
+                    types: {
+                        averages: spline()
+                    },
                     colors: {
                         'Depth': "green"
                     },
