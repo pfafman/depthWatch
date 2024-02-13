@@ -121,7 +121,7 @@ Template.hourly.onRendered (() => {
                     gallonsInTanks(depth.max,   depth.time),
                     gallonsInTanks(depth.exit,  depth.time)
                     ]);
-                averages.push(depth.sum/depth.readings);
+                averages.push(gallonsInTanks(depth.sum/depth.readings, depth.time));
             });
 
             console.log("Generate Chart");
