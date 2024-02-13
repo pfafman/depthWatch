@@ -44,6 +44,12 @@ Meteor.methods({
             'minAve': {
               $avg: "$min"
             },
+            'sum': {
+              $sum: "$sum"
+            },
+            'readings': {
+              $sum: "$readings"
+            },
             'time': {
               $first: "$time"
             }
@@ -54,12 +60,14 @@ Meteor.methods({
         },
         {
           $project: {
-            _id: 0,
-            "time": "$_id.day",
-            "enter": 1,
-            "max": 1,
-            "min": 1,
-            "exit": 1
+            _id:        0,
+            "time":    "$_id.day",
+            "enter":    1,
+            "max":      1,
+            "min":      1,
+            "exit":     1,
+            "sum":      1,
+            "readings": 1
           }
         }
       ];
@@ -104,6 +112,12 @@ Meteor.methods({
             },
             'exit': {
               $last: "$exit"
+            },
+             'sum': {
+              $sum: "$sum"
+            },
+            'readings': {
+              $sum: "$readings"
             }
           }
         },
@@ -112,12 +126,14 @@ Meteor.methods({
         },
         {
           $project: {
-            _id: 0,
-            "time": "$_id.day",
-            "enter": 1,
-            "max": 1,
-            "min": 1,
-            "exit": 1
+            _id:        0,
+            "time":    "$_id.day",
+            "enter":    1,
+            "max":      1,
+            "min":      1,
+            "exit":     1,
+            "sum":      1,
+            "readings": 1
           }
         }
       ];
