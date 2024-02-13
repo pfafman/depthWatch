@@ -124,7 +124,7 @@ Template.hourly.onRendered (() => {
                 averages.push(gallonsInTanks(depth.sum/depth.readings, depth.time));
             });
 
-            console.log("Generate Chart");
+            console.log("Generate Chart", averages);
             var chart = bb.generate({
                 data: {
                     x: "times",
@@ -135,7 +135,7 @@ Template.hourly.onRendered (() => {
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
                     types: {
-                        averages: spline()
+                        Average: spline()
                     },
                     colors: {
                         'Depth': "green"
