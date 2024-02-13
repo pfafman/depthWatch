@@ -102,7 +102,7 @@ Template.hourly.onRendered (() => {
             console.log("call hourly...");
             hourDepthsRunning = true;
             const results = await Meteor.callAsync('hourDepths');
-            console.log("update hourly", results.length);
+            console.log("update hourly", results.length, results[0]);
 
             daysOld.set(results[0]);
             
@@ -135,7 +135,7 @@ Template.hourly.onRendered (() => {
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
                     types: {
-                        Average: line()
+                        Average: spline()
                     },
                     colors: {
                         'Depth': "green"
