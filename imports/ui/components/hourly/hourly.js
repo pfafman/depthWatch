@@ -138,7 +138,7 @@ Template.hourly.onRendered (() => {
                         Average: spline()
                     },
                     colors: {
-                        'Depth': "green"
+                        'Average': "green"
                     },
                     labels: false
                 },
