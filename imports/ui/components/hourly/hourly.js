@@ -108,7 +108,7 @@ Template.hourly.onRendered (() => {
             
             let times = ["times"];
             let data = ["Gallons"];
-            let averages = ["averages"];
+            let averages = ["Average"];
             factor = gallonsPerInch; // capacity / newMaxDepth;
             results.forEach( depth => {
 
