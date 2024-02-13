@@ -1,6 +1,6 @@
 
 
-import bb, {area, candlestick, step, gauge, spline} from "billboard.js";
+import bb, {area, candlestick, step, gauge, spline, line} from "billboard.js";
 import { Depths } from '../../../api/depths/depths.js';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -135,7 +135,7 @@ Template.hourly.onRendered (() => {
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
                     types: {
-                        Average: spline()
+                        Average: line()
                     },
                     colors: {
                         'Depth': "green"
