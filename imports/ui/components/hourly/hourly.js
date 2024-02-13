@@ -124,7 +124,7 @@ Template.hourly.onRendered (() => {
                 averages.push(gallonsInTanks(depth.sum/depth.readings, depth.time));
             });
 
-            console.log("Generate Chart", averages);
+            console.log("Generate Chart");
             var chart = bb.generate({
                 data: {
                     x: "times",
