@@ -56,12 +56,12 @@ Template.daily.onRendered (() => {
 
                 if (weekOldDepth.get() == null) {
                     if (moment(depth.time).isSameOrAfter(weekAgo)) {
-                        weekOldDepth.set((depth.min+depth.max)/2);
+                        weekOldDepth.set(depth.sum/depth.readings);
                         weekOldDay.set(depth.time);
                     }
                 }
 
-                currentDayDepth.set((depth.max+depth.min)/2);
+                currentDayDepth.set(depth.sum/depth.readings);
                 currentDay.set(depth.time);
             });
 
