@@ -134,9 +134,9 @@ Template.hourly.onRendered (() => {
                         averages
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
-                    types: {
-                        Average: spline()
-                    },
+                    // types: {
+                    //     Average: spline()
+                    // },
                     colors: {
                         'Average': "green"
                     },
