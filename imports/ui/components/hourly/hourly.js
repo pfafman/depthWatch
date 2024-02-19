@@ -130,8 +130,9 @@ Template.hourly.onRendered (() => {
                     x: "times",
                     columns: [
                         times,
-                        data,
-                        averages
+                        data
+                        //,
+                        //averages
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
                     // types: {

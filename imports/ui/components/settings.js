@@ -6,7 +6,7 @@ tankCapacity = 3236;
 gallonsPerInch = 3 * tankCapacity/tankDepth;
 
 oldMaxDepth    = 57;   // Where Sensor was
-newMaxDepth = 67;   // Where Sensor is
+newMaxDepth = 67;      // Where Sensor is
 
 minValidReading = 66.8 - 59;  // 7.8 inches
 
