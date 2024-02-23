@@ -8,7 +8,7 @@
   "dependencies": {
     "@babel/runtime": "^7.23.9",
     "@materializecss/materialize": "^2.0.3",
-    "billboard.js": "^3.11.0",
+    "billboard.js": "^3.11.2",
     "d3": "^7.8.5",
     "jquery": "^3.7.1",
     "meteor-node-stubs": "^1.2.7",
