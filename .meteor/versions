@@ -60,7 +60,7 @@ mongo-id@1.0.8
 npm-mongo@4.17.2
 observe-sequence@1.0.22
 ordered-dict@1.1.0
-ostrio:flow-router-extra@3.10.0
+ostrio:flow-router-extra@3.10.1
 pfafman:restivus@0.8.14_12
 promise@0.12.2
 random@1.2.1
