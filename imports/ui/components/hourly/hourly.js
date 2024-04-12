@@ -202,7 +202,7 @@ Template.hourly.helpers({
     },
 
     currentDepthSonic() {
-        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return current.exit.toFixed(2);
         } else {
