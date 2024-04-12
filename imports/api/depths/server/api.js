@@ -96,7 +96,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     console.log("");
     return {status: 'ok'};
   }
-})
+});
 
 
 Api.addRoute('insertPressureDepth', {authRequired: false}, {
@@ -186,5 +186,5 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     console.log("");
     return {status: 'ok'};
   }
-})
+});
 
