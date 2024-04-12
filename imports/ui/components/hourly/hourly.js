@@ -31,7 +31,7 @@ Template.hourly.onRendered (() => {
 
         if (Depths.find({}).count() > 0) {
 
-            current = Depths.findOne({},{ sort: {time: -1}, limit:1 })
+            current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 })
 
             const range = await Meteor.callAsync('depthRange');
 
@@ -39,7 +39,7 @@ Template.hourly.onRendered (() => {
 
             if (current != null) {
                 
-                const percent = 100*(newMaxDepth - current.exit)/tankDepth;
+                const percent = 100*(current.exit)/tankDepth;
                 const min = 100*(newMaxDepth - range[0].max)/tankDepth;
                 const max = 100*(newMaxDepth - range[0].min)/tankDepth;
                 minHeight.set(newMaxDepth - range[0].max);
@@ -98,7 +98,7 @@ Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
 
-        if ((Depths.find({}).count() > 0) && (!hourDepthsRunning)) {
+        if ((Depths.find({type: 'sonic'}).count() > 0) && (!hourDepthsRunning)) {
             console.log("call hourly...");
             hourDepthsRunning = true;
             const results = await Meteor.callAsync('hourDepths');
@@ -187,15 +187,14 @@ Template.hourly.helpers({
 
 
     haveCurrentDepth() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         return (current != null);
     },
 
 
     currentDepth() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            //const percent = 100*(maxDepth - current.exit)/maxDepth;
             return current.exit.toFixed(2);
         } else {
             return "N/A";
@@ -203,7 +202,7 @@ Template.hourly.helpers({
     },
 
     currentReading() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if ((current != null) && (current.overCapacity)) {
             return current.minReading.toFixed(1);
         } else {
@@ -212,9 +211,9 @@ Template.hourly.helpers({
     },
 
     currentHeight() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const height = (newMaxDepth - current.exit);
+            const height = current.exit;
             return height.toFixed(1);
         } else {
             return "N/A";
@@ -235,7 +234,7 @@ Template.hourly.helpers({
 
 
     age() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             time = moment(current.time).format('llll');
             return `at ${time}`;
@@ -245,9 +244,9 @@ Template.hourly.helpers({
     },
 
     gallons() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  gallonsInTanks(current.exit, current.time);
+            const gallons =  gallonsInTanksPressure(current.exit, current.time);
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -255,9 +254,9 @@ Template.hourly.helpers({
     },
 
     down() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const down =  capacity - gallonsInTanks(current.exit, current.time);
+            const down =  capacity - gallonsInTanksPressure(current.exit, current.time);
             return down.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -266,8 +265,8 @@ Template.hourly.helpers({
 
 
     isDown() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
-        if ((current != null)  && (gallonsInTanks(current.exit, current.time) < capacity)) {
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        if ((current != null)  && (gallonsInTanksPressure(current.exit, current.time) < capacity)) {
             return true;
         } else {
             return false;
@@ -276,7 +275,7 @@ Template.hourly.helpers({
 
 
     overCapacity() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return current.overCapacity;
         } else {
@@ -285,7 +284,7 @@ Template.hourly.helpers({
     },
 
     change1() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             const oldest = daysOld.get();
             
@@ -309,7 +308,7 @@ Template.hourly.helpers({
     },
 
     change2() {
-        const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
