@@ -33,8 +33,6 @@ Template.hourly.onRendered (() => {
 
             current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 })
 
-            console.log("current water height", current.exit);
-
             const range = await Meteor.callAsync('depthRange');
 
             console.log("depth range", range[0].min, range[0].max);
@@ -205,7 +203,7 @@ Template.hourly.helpers({
 
     currentReading() {
         const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
-        if ((current != null) && (current.overCapacity)) {
+        if ((current != null) && (!current.overCapacity)) {
             return current.minReading.toFixed(1);
         } else {
             return "";
@@ -214,7 +212,7 @@ Template.hourly.helpers({
 
     currentReadingSonic() {
         const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
-        if ((current != null) && (current.overCapacity)) {
+        if ((current != null) && (!current.overCapacity)) {
             return current.minReading.toFixed(1);
         } else {
             return "";
