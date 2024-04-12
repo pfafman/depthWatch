@@ -38,7 +38,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     console.log("insertDepth", depth);
     
     try {
-      let lastRec = await Depths.findOneAsync({'type': 'sonic'},{'sort':{'$natural':-1}});
+      let lastRec = await Depths.findOneAsync({'type': 'sonic'},{'sort':{'time':-1}});
       //console.log("lastRec", lastRec);
 
       if (lastRec != null) {
@@ -118,31 +118,31 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
 
     if (depth > 59) {
       // Tank is maxed out
-      console.log("insertDepth: tank is at max", depth);
+      console.log("insertPressureDepth: tank is at max", depth);
       depth = 59;
       overCapacity = true;
     } else {
       overCapacity = false;
     }
 
-    console.log("insertDepth", depth);
+    console.log("insertPressureDepth", depth);
     
     try {
-      let lastRec = await Depths.findOneAsync({'type':'pressure'},{'sort':{'$natural':-1}});
+      let lastRec = await Depths.findOneAsync({'type':'pressure'},{'sort':{'time':-1}});
       //console.log("lastRec", lastRec);
 
       if (lastRec != null) {
-        console.log("insertDepth: new depth", lastRec.exit, '->', depth);
+        console.log("insertPressureDepth: new depth", lastRec.exit, '->', depth);
         let age = moment().diff(lastRec.time, 'minutes');
         if ((age < 1) && Math.abs(depth-lastRec.exit) > 1) {   // If less than 1 minute and change more than an inch skip load!!!
-          console.log("insertDepth: large change", depth, "<>", lastRec.exit);
+          console.log("insertPressureDepth: large change", depth, "<>", lastRec.exit);
           console.log('Return bad value ...');
           console.log("");
           return {status: 'bad value'};
         }
       }
     } catch (error) {
-      console.log("insertDepth: error on last check", error);
+      console.log("insertPressureDepth: error on last check", error);
     }
 
     time = moment().startOf('minute').toDate();
