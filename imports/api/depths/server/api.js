@@ -102,7 +102,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
 Api.addRoute('insertPressureDepth', {authRequired: false}, {
   post: async function() {
     
-    console.log("insertDepth", this.bodyParams);
+    console.log("insertPressureDepth", this.bodyParams);
 
     check(this.bodyParams.depth, Number);
     
