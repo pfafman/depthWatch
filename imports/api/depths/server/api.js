@@ -56,7 +56,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     }
 
     time = moment().startOf('minute').toDate();
-    let rec = await Depths.findOneAsync({'time': time});
+    let rec = await Depths.findOneAsync({'time': time, 'type': 'sonic'});
 
     if (rec != null) {
       rec['exit'] = depth;
@@ -146,7 +146,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     }
 
     time = moment().startOf('minute').toDate();
-    let rec = await Depths.findOneAsync({'time': time});
+    let rec = await Depths.findOneAsync({'time': time, 'type':'pressure'});
 
     if (rec != null) {
       rec['exit'] = depth;
