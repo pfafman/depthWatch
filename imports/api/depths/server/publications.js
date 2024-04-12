@@ -10,7 +10,8 @@ Meteor.publish('depths.lastDays', function () {
   return Depths.find({
       time: {
         $gte: moment().subtract(1, 'days').startOf('day').toDate()
-      }
+      },
+      type: 'sonic'
     },
     {sort: {time: 1}
   });
