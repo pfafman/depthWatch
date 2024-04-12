@@ -30,6 +30,7 @@ FlowRouter.route('/', {
 FlowRouter.route('*', {
   action() {
     // Show 404 error page using Blaze
+    console.log("Route not found");
     this.render('notFound');
 
     // Can be used with BlazeLayout,
