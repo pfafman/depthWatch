@@ -3,7 +3,8 @@
   {{#if Template.subscriptionsReady}}
     {{#if haveCurrentDepth}}
       <div class="flow-text current">
-        Current reading is {{currentDepth}} inches down {{age}}
+        Current reading is {{currentDepth}} inches in tank {{age}}, 
+        Sonic: {{currentReadingSonic}} inches down
         {{#if overCapacity}}
           &nbsp; <a class="btn-small pulse yellow"><i class="material-icons">water</i></a>
           &nbsp; <i class="smaller">Sensor reading is {{currentReading}} inches</i>
