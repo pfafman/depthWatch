@@ -13,6 +13,11 @@ Meteor.methods({
 
       const pipeline = [
         {
+          $match: {
+            type: 'sonic'
+          }
+        },
+        {
           $sort : { time : 1 } 
         },
         {
@@ -84,7 +89,8 @@ Meteor.methods({
           $match: { 'time' :
             {
               $gt: moment().subtract(5, 'days').startOf('day').toDate()
-            }
+            },
+            type: 'sonic'
           }
         },
         {
@@ -145,6 +151,11 @@ Meteor.methods({
   'depthRange' () {
     const pipeline = [
       {
+        $match: {
+          type: 'sonic'
+        }
+      },
+      {
         $group: {
           '_id': null,
           'min': {
@@ -169,7 +180,7 @@ Meteor.methods({
 
 
   'status' () {
-    const current = Depths.findOne({},{ sort: {time: -1}, limit:1 });
+    const current = Depths.findOne({'type': 'sonic'},{ sort: {time: -1}, limit:1 });
     //console.log(current);
     const age = moment().diff(moment(current.time), 'minutes');
     console.log("Last read", age,'minutes ago');

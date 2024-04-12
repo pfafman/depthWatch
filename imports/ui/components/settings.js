@@ -32,3 +32,23 @@ gallonsInTanks = (sensorReading, time) => {
 
     return Math.round(gallons);
 }
+
+
+gallonsInTanksPressure = (sensorReading, time) => {
+    let gallons = capacity;
+    let theMaxDepth = newMaxDepth;
+
+    if (moment(time).isBefore(moment("2023-05-10"))) {
+        theMaxDepth = oldMaxDepth;
+    }
+
+    if (sensorReading > 59) {
+        gallons = capacity;
+    } else if (sensorReading < 0) {
+        gallons = 0;
+    } else {
+        gallons = sensorReading * gallonsPerInch;
+    }
+
+    return Math.round(gallons);
+}
