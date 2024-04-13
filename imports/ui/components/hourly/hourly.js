@@ -109,7 +109,6 @@ Template.hourly.onRendered (() => {
             let times = ["times"];
             let data = ["Gallons"];
             let averages = ["Average"];
-            factor = gallonsPerInch; // capacity / newMaxDepth;
             results.forEach( depth => {
 
                 //console.log(depth);
@@ -170,6 +169,85 @@ Template.hourly.onRendered (() => {
                     height: 200
                 },
                 bindto: "#hourlyChart"
+            });
+            hourDepthsRunning = false;
+        }
+    
+    });
+
+    Tracker.autorun(async () => {
+
+        if ((Depths.find({type: 'pressure'}).count() > 0) && (!hourDepthsRunning)) {
+            console.log("call hourly...");
+            hourDepthsRunning = true;
+            const results = await Meteor.callAsync('hourDepthsPressure');
+            console.log("update pressure hourly", results.length, results[0]);
+
+            //daysOld.set(results[0]);
+            
+            let times = ["times"];
+            let data = ["Gallons"];
+            let averages = ["Average"];
+            results.forEach( depth => {
+
+                //console.log(depth);
+                times.push(depth.time);
+
+                data.push([
+                    gallonsInTanksPressure(depth.enter, depth.time),
+                    gallonsInTanksPressure(depth.min,   depth.time),
+                    gallonsInTanksPressure(depth.max,   depth.time),
+                    gallonsInTanksPressure(depth.exit,  depth.time)
+                    ]);
+                averages.push(gallonsInTanksPressure(depth.sum/depth.readings, depth.time));
+            });
+
+            console.log("Generate Chart");
+            var chart = bb.generate({
+                data: {
+                    x: "times",
+                    columns: [
+                        times,
+                        data
+                        //,
+                        //averages
+                    ],
+                    type: candlestick(),       // for ESM specify as: candlestick()
+                    // types: {
+                    //     Average: spline()
+                    // },
+                    colors: {
+                        'Average': "green"
+                    },
+                    labels: false
+                },
+                candlestick: {
+                    color: {
+                      down: "red"
+                    },
+                    width: {
+                      ratio: 0.5
+                    }
+                },
+                axis: {
+                    x: {
+                        type: "timeseries",
+                        tick: {
+                            format: "%I:00 %p"
+                        },
+                        padding: {
+                            left: 1,
+                            right: 1
+                        }
+                    },
+                    y2: {
+                        show: true
+                    }
+                },
+                size: {
+                    height: 200
+                },
+                bindto: "#hourlySonicChart"
             });
             hourDepthsRunning = false;
         }
