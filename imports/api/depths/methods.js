@@ -80,6 +80,7 @@ Meteor.methods({
       return Depths.aggregate(pipeline, {});
   },
 
+
   'hourDepths' () {
 
       //console.log("hourDepths: called");
@@ -91,6 +92,74 @@ Meteor.methods({
               $gt: moment().subtract(5, 'days').startOf('day').toDate()
             },
             type: 'sonic'
+          }
+        },
+        {
+          $sort : { 'time' : 1 } 
+        },
+        {
+          $group: {
+            '_id': {
+              'day': {
+                $dateToString: {
+                  format: "%Y-%m-%d %H:00:00",
+                  date: "$time",
+                  timezone: "America/Denver"
+                }
+              }
+            },
+            'enter': {
+              $first: "$enter"
+            },
+            'max': {
+              $max: "$max"
+            },
+            'min': {
+              $min: "$min"
+            },
+            'exit': {
+              $last: "$exit"
+            },
+             'sum': {
+              $sum: "$sum"
+            },
+            'readings': {
+              $sum: "$readings"
+            }
+          }
+        },
+        {
+          $sort : { '_id.day' : 1 } 
+        },
+        {
+          $project: {
+            _id:        0,
+            "time":    "$_id.day",
+            "enter":    1,
+            "max":      1,
+            "min":      1,
+            "exit":     1,
+            "sum":      1,
+            "readings": 1
+          }
+        }
+      ];
+
+      return Depths.aggregate(pipeline, {});
+  },
+
+
+  'hourDepthsPressure' () {
+
+      //console.log("hourDepths: called");
+
+      const pipeline = [
+        {
+          $match: { 'time' :
+            {
+              $gt: moment().subtract(5, 'days').startOf('day').toDate()
+            },
+            type: 'pressure'
           }
         },
         {
