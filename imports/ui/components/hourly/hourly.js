@@ -104,7 +104,7 @@ Template.hourly.onRendered (() => {
             const results = await Meteor.callAsync('hourDepths');
             console.log("update hourly", results.length, results[0]);
 
-            daysOld.set(results[0]);
+            //daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Gallons"];
@@ -183,7 +183,7 @@ Template.hourly.onRendered (() => {
             const results = await Meteor.callAsync('hourDepthsPressure');
             console.log("update pressure hourly", results.length, results[0]);
 
-            //daysOld.set(results[0]);
+            daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Gallons"];
@@ -299,9 +299,9 @@ Template.hourly.helpers({
 
 
     currentHeight() {
-        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const height = current.exit;
+            const height = 59 - current.exit;
             return height.toFixed(1);
         } else {
             return "N/A";
@@ -374,13 +374,13 @@ Template.hourly.helpers({
     },
 
     change1() {
-        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             const oldest = daysOld.get();
             
             if ((current != null) && (oldest != null)) {
                 console.log("change", oldest.exit, "->", current.exit, gallonsInTanks(oldest.exit, oldest.time), '->', gallonsInTanks(current.exit, current.time));
-                let gallons =  gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time);
+                let gallons =  gallonsInTanksPressure(current.exit, current.time) - gallonsInTanksPressure(oldest.exit, oldest.time);
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
@@ -398,12 +398,12 @@ Template.hourly.helpers({
     },
 
     change2() {
-        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const oldest  = Depths.findOne({time: {$gte: moment(current.time).subtract(6, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
+            const oldest  = Depths.findOne({type: 'pressure', time: {$gte: moment(current.time).subtract(6, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
                 console.log("change4", oldest.exit, "->", current.exit);
-                let gallons =  gallonsInTanks(current.exit, current.time) - gallonsInTanks(oldest.exit, oldest.time); 
+                let gallons =  gallonsInTanksPressure(current.exit, current.time) - gallonsInTanksPressure(oldest.exit, oldest.time); 
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
