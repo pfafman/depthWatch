@@ -9,13 +9,13 @@ import moment from 'moment';
 
 import './hourly.html';
 
-
 const minHeight = new ReactiveVar(null);
 const maxHeight = new ReactiveVar(null);
 
 const daysOld   = new ReactiveVar(null);
 
-let hourDepthsRunning = false;
+let hourDepthsRunning  = false;
+let hourDepths2Running = false;
 
 
 Template.hourly.onCreated (() => {
@@ -177,9 +177,9 @@ Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
 
-        if ((Depths.find({type: 'pressure'}).count() > 0) && (!hourDepthsRunning)) {
+        if ((Depths.find({type: 'pressure'}).count() > 0) && (!hourDepths2Running)) {
             console.log("call hourly...");
-            hourDepthsRunning = true;
+            hourDepths2Running = true;
             const results = await Meteor.callAsync('hourDepthsPressure');
             console.log("update pressure hourly", results.length, results[0]);
 
@@ -249,7 +249,7 @@ Template.hourly.onRendered (() => {
                 },
                 bindto: "#hourlySonicChart"
             });
-            hourDepthsRunning = false;
+            hourDepths2Running = false;
         }
     
     });
