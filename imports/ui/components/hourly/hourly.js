@@ -123,8 +123,11 @@ Template.hourly.onRendered (() => {
                 averages.push(gallonsInTanks(depth.sum/depth.readings, depth.time));
             });
 
-            console.log("Generate Chart");
+            console.log("Generate Pressure Sensor Chart");
             var chart = bb.generate({
+                title: {
+                    text: "Pressure Sensor"
+                },
                 data: {
                     x: "times",
                     columns: [
@@ -202,8 +205,11 @@ Template.hourly.onRendered (() => {
                 averages.push(gallonsInTanksPressure(depth.sum/depth.readings, depth.time));
             });
 
-            console.log("Generate Chart");
+            console.log("Generate UltraSonic Sensor Chart");
             var chart = bb.generate({
+                title: {
+                    text: "UltraSonic Sensor"
+                },
                 data: {
                     x: "times",
                     columns: [
