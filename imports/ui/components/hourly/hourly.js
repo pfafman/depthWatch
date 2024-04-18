@@ -126,7 +126,7 @@ Template.hourly.onRendered (() => {
             console.log("Generate Pressure Sensor Chart");
             var chart = bb.generate({
                 title: {
-                    text: "Pressure Sensor"
+                    text: "UltraSonic Sensor"
                 },
                 data: {
                     x: "times",
@@ -208,7 +208,7 @@ Template.hourly.onRendered (() => {
             console.log("Generate UltraSonic Sensor Chart");
             var chart = bb.generate({
                 title: {
-                    text: "UltraSonic Sensor"
+                    text: "Pressure Sensor"
                 },
                 data: {
                     x: "times",
