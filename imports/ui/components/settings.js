@@ -3,7 +3,7 @@ import moment from 'moment';
 tankDepth = 59;
 tankCapacity = 3236;
 
-gallonsPerInch = 3 * tankCapacity/tankDepth;
+gallonsPerInch = 3 * tankCapacity/tankDepth;  // 164.542
 
 oldMaxDepth    = 57;   // Where Sensor was
 newMaxDepth = 67;      // Where Sensor is
@@ -13,6 +13,7 @@ minValidReading = 66.8 - 59;  // 7.8 inches
 capacity = tankCapacity * 3; 
 
 offset = 0.5*gallonsPerInch*2/3;
+
 
 gallonsInTanks = (sensorReading, time) => {
     let gallons = capacity;
@@ -27,7 +28,7 @@ gallonsInTanks = (sensorReading, time) => {
     } else if (sensorReading < minValidReading) {
         gallons = capacity - ((sensorReading - minValidReading) * gallonsPerInch/3);
     } else {
-        gallons = (theMaxDepth-sensorReading) * gallonsPerInch + offset;
+        gallons = (theMaxDepth-sensorReading) * gallonsPerInch; // + offset;
     }
 
     return Math.round(gallons);

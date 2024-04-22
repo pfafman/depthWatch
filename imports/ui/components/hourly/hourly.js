@@ -307,7 +307,7 @@ Template.hourly.helpers({
     currentHeight() {
         const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const height = 59 - current.exit;
+            const height = 67 - current.exit;
             return height.toFixed(1);
         } else {
             return "N/A";
