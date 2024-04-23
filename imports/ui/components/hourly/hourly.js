@@ -295,7 +295,7 @@ Template.hourly.helpers({
     },
 
     currentReading() {
-        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
         if ((current != null) && (current.overCapacity)) {
             return current.minReading.toFixed(1);
         } else {
