@@ -294,8 +294,17 @@ Template.hourly.helpers({
         }
     },
 
-    currentReading() {
+    currentReadingSonic() {
         const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current.overCapacity)) {
+            return current.minReading.toFixed(1);
+        } else {
+            return "";
+        }
+    },
+
+    currentReadingPressure() {
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if ((current != null) && (current.overCapacity)) {
             return current.minReading.toFixed(1);
         } else {
