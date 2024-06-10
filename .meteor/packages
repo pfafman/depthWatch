@@ -22,5 +22,4 @@ ostrio:flow-router-extra      # FlowRouter is a very simple router for Meteor
 johanbrook:publication-collector  # Test a Meteor publication by collecting its output
 blaze-html-templates
 sakulstra:aggregate
-fourseven:scss
 pfafman:restivus
