@@ -6,9 +6,9 @@
     "test": "meteor test --once --driver-package meteortesting:mocha"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.6",
+    "@babel/runtime": "^7.24.7",
     "@materializecss/materialize": "^2.0.4",
-    "billboard.js": "^3.11.3",
+    "billboard.js": "^3.12.2",
     "d3": "^7.9.0",
     "jquery": "^3.7.1",
     "meteor-node-stubs": "^1.2.9",
