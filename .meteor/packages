@@ -23,3 +23,4 @@ johanbrook:publication-collector  # Test a Meteor publication by collecting its 
 blaze-html-templates
 sakulstra:aggregate
 pfafman:restivus
+fourseven:scss
