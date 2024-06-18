@@ -19,7 +19,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
     let depth = Math.round(Number(this.bodyParams.depth)*100.0)/100;
     let reading = depth;
 
-    if ((depth > 67) || (depth <= 1)) {
+    if ((depth > 70) || (depth <= 0)) {
       console.log("insertDepth: bad value", depth);
       console.log('Return bad value ...');
       console.log("");
@@ -109,7 +109,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     let depth = Math.round(Number(this.bodyParams.depth)*100.0)/100;
     let reading = depth;
 
-    if ((depth > 67) || (depth <= 1)) {
+    if ((depth > 70) || (depth <= 0)) {
       console.log("insertPressureDepth: bad value", depth);
       console.log('Return bad value ...');
       console.log("");
