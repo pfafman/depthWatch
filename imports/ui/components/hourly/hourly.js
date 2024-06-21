@@ -388,6 +388,15 @@ Template.hourly.helpers({
         }
     },
 
+    overFlow() {
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.overFlow;
+        } else {
+            return false;
+        }
+    },
+
     change1() {
         const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
