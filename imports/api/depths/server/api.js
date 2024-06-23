@@ -116,6 +116,12 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
       return {status: 'bad value'};
     }
 
+    if (depth > 68) {
+      overFlow = true;
+    } else {
+      overFlow = false;
+    }
+
     if (depth > 59) {
       // Tank is maxed out
       console.log("insertPressureDepth: tank is at max", depth);
@@ -159,6 +165,10 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
         rec['overCapacity'] = false;
       }
       rec['overCapacity'] = overCapacity || rec['overCapacity']
+      if (rec['overFlow'] == null) {
+        rec['overFlow'] = false;
+      }
+      rec['overFlow'] = overFlow || rec['overFlow']
       delete rec['_id']
     } else {
       rec = {
@@ -171,6 +181,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
         'sum'          : depth,
         'readings'     : 1,
         'overCapacity' : overCapacity,
+        'overFlow'     : overFlow
         'type'         : 'pressure'
       }
     }
