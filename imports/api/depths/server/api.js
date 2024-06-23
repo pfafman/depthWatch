@@ -181,7 +181,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
         'sum'          : depth,
         'readings'     : 1,
         'overCapacity' : overCapacity,
-        'overFlow'     : overFlow
+        'overFlow'     : overFlow,
         'type'         : 'pressure'
       }
     }
