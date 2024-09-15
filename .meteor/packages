@@ -4,23 +4,24 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base@1.5.1             # Packages every Meteor app needs to have
-mobile-experience@1.1.1       # Packages for a great mobile UX
-mongo@1.16.10                  # The database Meteor supports right now
-jquery                        # Wrapper package for npm-installed jquery
-reactive-var@1.0.12           # Reactive variable for tracker
-tracker@1.3.3                 # Meteor's client-side reactive programming library
+meteor-base                  # Packages every Meteor app needs to have
+mobile-experience            # Packages for a great mobile UX
+mongo                        # The database Meteor supports right now
+jquery                       # Wrapper package for npm-installed jquery
+reactive-var                 # Reactive variable for tracker
+tracker                      # Meteor's client-side reactive programming library
 
-standard-minifier-css@1.9.2   # CSS minifier run for production mode
-standard-minifier-js@2.8.1    # JS minifier run for production mode
-ecmascript@0.16.8             # Enable ECMAScript2015+ syntax in app code
-typescript@4.9.5              # Enable TypeScript syntax in .ts and .tsx modules
-shell-server@0.5.0            # Server-side component of the `meteor shell` command
+standard-minifier-css        # CSS minifier run for production mode
+standard-minifier-js         # JS minifier run for production mode
+ecmascript                   # Enable ECMAScript2015+ syntax in app code
+typescript                   # Enable TypeScript syntax in .ts and .tsx modules
+shell-server                 # Server-side component of the `meteor shell` command
 
-ostrio:flow-router-extra      # FlowRouter is a very simple router for Meteor
 
-johanbrook:publication-collector  # Test a Meteor publication by collecting its output
 blaze-html-templates
-sakulstra:aggregate
 pfafman:restivus
-fourseven:scss
+leonardoventurini:scss
+coffeescript
+accounts-password
+email
+ostrio:flow-router-extra@3.10.1

@@ -5,8 +5,9 @@ import { Depths } from '../depths.js';
 import moment from 'moment';
 
 
-Meteor.publish('depths.lastDays', function () {
-  console.log("Publish last 1 days Depths", Depths.find({}).count());
+Meteor.publish('depths.lastDays', async function () {
+  const dayCount = await Depths.countDocuments({})
+  console.log("Publish last 1 days Depths", dayCount);
   return Depths.find({
       time: {
         $gte: moment().subtract(1, 'days').startOf('day').toDate()

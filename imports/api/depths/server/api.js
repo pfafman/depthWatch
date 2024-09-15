@@ -3,11 +3,14 @@ import { Depths } from '../depths.js'
 import { check } from 'meteor/check';
 import moment from 'moment';
 
-Api = new Restivus({
+//console.log("API Restivus:", Restivus);
+
+const Api = new Restivus({
   useDefaultAuth: true,
   prettyJson: false,
 });
 
+//console.log("API:", Api);
 
 Api.addRoute('insertDepth', {authRequired: false}, {
   post: async function() {

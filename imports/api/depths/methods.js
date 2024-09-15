@@ -7,9 +7,7 @@ import moment from 'moment';
 
 Meteor.methods({
 
-  'dayDepths' () {
-
-      //console.log("dayDepths: called");
+  async dayDepths () {
 
       const pipeline = [
         {
@@ -77,11 +75,13 @@ Meteor.methods({
         }
       ];
 
-      return Depths.aggregate(pipeline, {});
+      let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+
+      return result;
   },
 
 
-  'hourDepths' () {
+  async hourDepths () {
 
       //console.log("hourDepths: called");
 
@@ -145,11 +145,13 @@ Meteor.methods({
         }
       ];
 
-      return Depths.aggregate(pipeline, {});
+      let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+
+      return result;
   },
 
 
-  'hourDepthsPressure' () {
+  async hourDepthsPressure () {
 
       //console.log("hourDepths: called");
 
@@ -213,11 +215,13 @@ Meteor.methods({
         }
       ];
 
-      return Depths.aggregate(pipeline, {});
+      let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+
+      return result;
   },
 
 
-  'depthRange' () {
+  async depthRange () {
     const pipeline = [
       {
         $match: {
@@ -244,7 +248,9 @@ Meteor.methods({
       }
     ]
 
-    return Depths.aggregate(pipeline, {});
+    let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+
+    return result;
   },
 
 

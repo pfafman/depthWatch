@@ -22,15 +22,16 @@ Template.daily.onRendered (() => {
 
     Tracker.autorun(async () => {
         
+
         console.log("autorun daily ...", Depths.find({}).count());
 
         if (Depths.find({}).count() >= 0) {
 
-            console.log("update daily ...", Depths.find({}).count());
+            console.log("update daily ...", await Depths.find({}).count());
 
             const results = await Meteor.callAsync('dayDepths');
 
-            //console.log("update daily", results.length);
+            console.log("update daily", results);
             
             let now = moment();
             let weekAgo = moment().subtract(1,'week');

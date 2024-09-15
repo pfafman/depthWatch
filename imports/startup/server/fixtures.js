@@ -5,8 +5,6 @@ import { Depths } from '../../api/depths/depths.js';
 
 import moment from 'moment';
 
-console.log("Load fixtures.js");
-
 Meteor.startup( async () => {
   
   // console.log("Remove Depths");
@@ -14,6 +12,6 @@ Meteor.startup( async () => {
   // await Depths.removeAsync({})
 
 
-  console.log("Depths:", Depths.find().count());
+  console.log("Depths:", await Depths.find().countAsync());
 
 });

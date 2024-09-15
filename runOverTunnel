@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export MONGO_URL="mongodb://localhost:27001/depthwatch?replicaSet=kyote&directConnection=true"
-export MONGO_OPLOG_URL="mongodb://oplogger:PasswordForOplogger@localhost:27001/local?authSource=admin&replicaSet=kyote&directConnection=true"
+export MONGO_URL="mongodb://localhost:27001/depthwatch?replicaSet=coworkr&directConnection=true"
+export MONGO_OPLOG_URL="mongodb://oplogger:PasswordForOplogger@localhost:27001/local?authSource=admin&replicaSet=coworkr&directConnection=true"
 
 export FORCE_SSL=1
 

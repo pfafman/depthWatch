@@ -27,7 +27,7 @@ FlowRouter.route('/', {
 // });
 
 // Create 404 route (catch-all)
-FlowRouter.route('*', {
+FlowRouter.route('/*', {
   action() {
     // Show 404 error page using Blaze
     console.log("Route not found");
