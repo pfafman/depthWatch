@@ -75,7 +75,7 @@ Meteor.methods({
         }
       ];
 
-      let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+      let result = await Depths.aggregate(pipeline, {}).toArray();
 
       return result;
   },
@@ -145,7 +145,7 @@ Meteor.methods({
         }
       ];
 
-      let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+      let result = await Depths.aggregate(pipeline, {}).toArray();
 
       return result;
   },
@@ -215,7 +215,7 @@ Meteor.methods({
         }
       ];
 
-      let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+      let result = await Depths.aggregate(pipeline, {}).toArray();
 
       return result;
   },
@@ -248,14 +248,14 @@ Meteor.methods({
       }
     ]
 
-    let result = await Depths.rawCollection().aggregate(pipeline, {}).toArray();
+    let result = await Depths.aggregate(pipeline, {}).toArray();
 
     return result;
   },
 
 
   'status' () {
-    const current = Depths.findOne({'type': 'sonic'},{ sort: {time: -1}, limit:1 });
+    const current = Depths.findOneAsync({'type': 'sonic'},{ sort: {time: -1}, limit:1 });
     //console.log(current);
     const age = moment().diff(moment(current.time), 'minutes');
     console.log("Last read", age,'minutes ago');
