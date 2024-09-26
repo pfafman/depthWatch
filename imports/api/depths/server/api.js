@@ -57,7 +57,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
       console.log("insertDepth: error on last check", error);
     }
 
-    time = moment().startOf('minute').toDate();
+    const time = moment().startOf('minute').toDate();
     let rec = await Depths.findOneAsync({'time': time, 'type': 'sonic'});
 
     if (rec != null) {
@@ -151,7 +151,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
       console.log("insertPressureDepth: error on last check", error);
     }
 
-    time = moment().startOf('minute').toDate();
+    const time = moment().startOf('minute').toDate();
     let rec = await Depths.findOneAsync({'time': time, 'type':'pressure'});
 
     if (rec != null) {
