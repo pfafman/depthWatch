@@ -31,7 +31,7 @@ Template.daily.onRendered (() => {
 
             const results = await Meteor.callAsync('dayDepths');
 
-            console.log("update daily", results);
+            //console.log("update daily", results);
             
             let now = moment();
             let weekAgo = moment().subtract(1,'week');
@@ -48,10 +48,10 @@ Template.daily.onRendered (() => {
                 let diff = gallonsInTanks(depth.exit,  depth.time) - gallonsInTanks(depth.enter, depth.time);
 
                 data.push([
-                    gallonsInTanks(depth.enter, depth.time),
-                    gallonsInTanks(depth.min,   depth.time),
-                    gallonsInTanks(depth.max,   depth.time),
-                    gallonsInTanks(depth.exit,  depth.time)
+                    gallonsInTanksPressure(depth.enter, depth.time),
+                    gallonsInTanksPressure(depth.min,   depth.time),
+                    gallonsInTanksPressure(depth.max,   depth.time),
+                    gallonsInTanksPressure(depth.exit,  depth.time)
                     ]);
                 change.push(diff)
 
@@ -67,6 +67,9 @@ Template.daily.onRendered (() => {
             });
 
             var chart = bb.generate({
+                title: {
+                    text: "Pressure Sensor"
+                },
                 data: {
                     x: "times",
                     columns: [
@@ -108,14 +111,38 @@ Template.daily.onRendered (() => {
                 bindto: "#dailyChart"
             });
         
+
+            const resultsSonic = await Meteor.callAsync('dayDepthsSonic');
+
+            let stimes = ["times"];
+            let sdata = ["Gallons"]
+            factor = gallonsPerInch;
+            resultsSonic.forEach( depth => {
+                //console.log(depth);
+                stimes.push(depth.time);
+                
+                let diff = gallonsInTanks(depth.exit,  depth.time) - gallonsInTanks(depth.enter, depth.time);
+
+                sdata.push([
+                    gallonsInTanks(depth.enter, depth.time),
+                    gallonsInTanks(depth.min,   depth.time),
+                    gallonsInTanks(depth.max,   depth.time),
+                    gallonsInTanks(depth.exit,  depth.time)
+                    ]);
+
+            });
+
             var chart = bb.generate({
+                title: {
+                    text: "UltraSonic Sensor"
+                },
                 data: {
                     x: "times",
                     columns: [
-                        times,
-                        change
+                        stimes,
+                        sdata
                     ],
-                    type: bar(),
+                    type: candlestick(),
                     colors: {
                         'Depth': "green"
                     },
@@ -147,8 +174,9 @@ Template.daily.onRendered (() => {
                 size: {
                     height: 200
                 },
-                bindto: "#dailyChangeChart"
+                bindto: "#dailyChartPressure"
             });
+
         }
     });
 

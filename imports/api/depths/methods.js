@@ -12,7 +12,7 @@ Meteor.methods({
       const pipeline = [
         {
           $match: {
-            type: 'sonic'
+            type: 'pressure'
           }
         },
         {
@@ -80,6 +80,79 @@ Meteor.methods({
       return result;
   },
 
+
+  async dayDepthsSonic () {
+
+      const pipeline = [
+        {
+          $match: {
+            type: 'sonic'
+          }
+        },
+        {
+          $sort : { time : 1 } 
+        },
+        {
+          $group: {
+            '_id': {
+              'day': {
+                $dateToString: {
+                  format: "%Y-%m-%d",
+                  date: "$time",
+                  timezone: "America/Denver"
+                }
+              }
+            },
+            'enter': {
+              $first: "$enter"
+            },
+            'max': {
+              $max: "$max"
+            },
+            'min': {
+              $min: "$min"
+            },
+            'exit': {
+              $last: "$exit"
+            },
+            'maxAve': {
+              $avg: "$max"
+            },
+            'minAve': {
+              $avg: "$min"
+            },
+            'sum': {
+              $sum: "$sum"
+            },
+            'readings': {
+              $sum: "$readings"
+            },
+            'time': {
+              $first: "$time"
+            }
+          }
+        },
+        {
+           $sort : { time : 1 } 
+        },
+        {
+          $project: {
+            _id:        0,
+            "time":    "$_id.day",
+            "enter":    1,
+            "max":      1,
+            "min":      1,
+            "exit":     1,
+            "sum":      1,
+            "readings": 1
+          }
+        }
+      ];
+
+      let result = await Depths.aggregate(pipeline, {}).toArray();
+
+      return result;
+  },
 
   async hourDepths () {
 
