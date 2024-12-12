@@ -22,6 +22,5 @@ blaze-html-templates
 pfafman:restivus
 leonardoventurini:scss
 coffeescript
-accounts-password@3.0.3
 email@3.1.1
 ostrio:flow-router-extra@3.10.1
