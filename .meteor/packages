@@ -17,9 +17,10 @@ ecmascript@0.16.10                   # Enable ECMAScript2015+ syntax in app code
 typescript@5.6.3                   # Enable TypeScript syntax in .ts and .tsx modules
 shell-server@0.6.1                 # Server-side component of the `meteor shell` command
 
-
 blaze-html-templates
 pfafman:restivus
 leonardoventurini:scss
 coffeescript
 ostrio:flow-router-extra@3.10.1
+email
+accounts-password
