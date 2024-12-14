@@ -198,8 +198,8 @@ Template.hourly.onRendered (() => {
 
                 data.push([
                     gallonsInTanksPressure(depth.enter, depth.time),
-                    gallonsInTanksPressure(depth.min,   depth.time),
                     gallonsInTanksPressure(depth.max,   depth.time),
+                    gallonsInTanksPressure(depth.min,   depth.time),
                     gallonsInTanksPressure(depth.exit,  depth.time)
                     ]);
                 averages.push(gallonsInTanksPressure(depth.sum/depth.readings, depth.time));

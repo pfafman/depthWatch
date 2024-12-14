@@ -49,8 +49,8 @@ Template.daily.onRendered (() => {
 
                 data.push([
                     gallonsInTanksPressure(depth.enter, depth.time),
-                    gallonsInTanksPressure(depth.min,   depth.time),
                     gallonsInTanksPressure(depth.max,   depth.time),
+                    gallonsInTanksPressure(depth.min,   depth.time),
                     gallonsInTanksPressure(depth.exit,  depth.time)
                     ]);
                 change.push(diff)
