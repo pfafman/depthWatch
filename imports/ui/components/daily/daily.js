@@ -45,7 +45,7 @@ Template.daily.onRendered (() => {
                 //console.log(depth);
                 times.push(depth.time);
                 
-                let diff = gallonsInTanks(depth.exit,  depth.time) - gallonsInTanks(depth.enter, depth.time);
+                let diff = gallonsInTanksPressure(depth.exit,  depth.time) - gallonsInTanksPressure(depth.enter, depth.time);
 
                 data.push([
                     gallonsInTanksPressure(depth.enter, depth.time),
@@ -186,15 +186,15 @@ Template.daily.onRendered (() => {
 Template.daily.helpers({
     trend() {
         if (weekOldDepth.get() != null) {
-            let gallonsAveCurrent = gallonsInTanks(currentDayDepth.get(), currentDay.get());
-            let gallonsAveWeekOld = gallonsInTanks(weekOldDepth.get(),currentDay.get(),weekOldDay.get());
+            let gallonsAveCurrent = gallonsInTanksPressure(currentDayDepth.get(), currentDay.get());
+            let gallonsAveWeekOld = gallonsInTanksPressure(weekOldDepth.get(),currentDay.get(),weekOldDay.get());
             let change = gallonsAveCurrent - gallonsAveWeekOld
             console.log("Trend", change, currentDay.get(), weekOldDay.get());
             
             let days = moment.duration(moment(currentDay.get()).diff(moment(weekOldDay.get()))).days();
             console.log("Trend", days, "days", change, currentDay.get(), weekOldDay.get());
             let trend = change/days;
-            let runOutDays = -gallonsInTanks(currentDayDepth.get(), currentDay.get())/trend;
+            let runOutDays = -gallonsInTanksPressure(currentDayDepth.get(), currentDay.get())/trend;
             if (runOutDays > 0) {
                 runOutDate = (moment().add(runOutDays, 'days')).format('MMM Do, YYYY');
                 return `Week (${days.toFixed(1)} days) trend is down ${-trend.toFixed(0)} gallons per day (${gallonsAveWeekOld.toFixed(0)} ->  ${gallonsAveCurrent.toFixed(0)}).  Will last to ${runOutDate} at this rate.`;
