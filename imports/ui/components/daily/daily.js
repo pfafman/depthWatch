@@ -6,7 +6,8 @@ import moment from 'moment';
 
 import './daily.html';
 
-
+const yearOldDepth    = new ReactiveVar(null);
+const yearOldDay      = new ReactiveVar(null);
 const weekOldDepth    = new ReactiveVar(null);
 const weekOldDay      = new ReactiveVar(null);
 const currentDayDepth = new ReactiveVar(null);
@@ -15,7 +16,6 @@ const currentDay      = new ReactiveVar(null);
 
 Template.daily.onCreated (() => {
     //console.log("daily.onCreated");
-   
 });
 
 Template.daily.onRendered (() => {
@@ -35,6 +35,7 @@ Template.daily.onRendered (() => {
             
             let now = moment();
             let weekAgo = moment().subtract(1,'week');
+            let yearAgo = moment().subtract(1,'year');
             console.log("now", now.toDate(), "last week", weekAgo.toDate());
             
             let times = ["times"];
@@ -59,6 +60,13 @@ Template.daily.onRendered (() => {
                     if (moment(depth.time).isSameOrAfter(weekAgo)) {
                         weekOldDepth.set(depth.sum/depth.readings);
                         weekOldDay.set(depth.time);
+                    }
+                }
+
+                if (yearOldDepth.get() == null) {
+                    if (moment(depth.time).isSameOrAfter(yearAgo)) {
+                        yearOldDepth.set(depth.sum/depth.readings);
+                        yearOldDay.set(depth.time);
                     }
                 }
 
@@ -184,6 +192,12 @@ Template.daily.onRendered (() => {
 
 
 Template.daily.helpers({
+    lastYear() {
+        if (yearOldDepth.get() != null) {
+            let lastYearGallons = gallonsInTanksPressure(yearOldDepth.get(), yearOldDay.get());
+            return `Last year ${lastYearGallons} gallons`;
+        }
+    },
     trend() {
         if (weekOldDepth.get() != null) {
             let gallonsAveCurrent = gallonsInTanksPressure(currentDayDepth.get(), currentDay.get());
