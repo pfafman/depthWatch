@@ -34,7 +34,7 @@ Template.daily.onRendered (() => {
             //console.log("update daily", results);
             
             let now = moment();
-            let weekAgo = moment().subtract(1,'week');
+            let weekAgo = moment().subtract(2,'weeks');
             let yearAgo = moment().subtract(1,'year');
             console.log("now", now.toDate(), "last week", weekAgo.toDate());
             
@@ -211,9 +211,9 @@ Template.daily.helpers({
             let runOutDays = -gallonsInTanksPressure(currentDayDepth.get(), currentDay.get())/trend;
             if (runOutDays > 0) {
                 runOutDate = (moment().add(runOutDays, 'days')).format('MMM Do, YYYY');
-                return `Week (${days.toFixed(1)} days) trend is down ${-trend.toFixed(0)} gallons per day (${gallonsAveWeekOld.toFixed(0)} ->  ${gallonsAveCurrent.toFixed(0)}).  Will last to ${runOutDate} at this rate.`;
+                return `Two Week (${days.toFixed(1)} days) trend is down ${-trend.toFixed(0)} gallons per day (${gallonsAveWeekOld.toFixed(0)} ->  ${gallonsAveCurrent.toFixed(0)}).  Will last to ${runOutDate} at this rate.`;
             } else {
-                return `Week (${days.toFixed(1)} days) trend is up ${trend.toFixed(0)} gallons per day.`;
+                return `Two Week (${days.toFixed(1)} days) trend is up ${trend.toFixed(0)} gallons per day.`;
             }
         } else {
             return "";

@@ -17,6 +17,7 @@ const daysOld   = new ReactiveVar(null);
 let hourDepthsRunning  = false;
 let hourDepths2Running = false;
 
+let DO_SONIC = false
 
 Template.hourly.onCreated (() => {
     console.log("hourly.onCreated");
@@ -98,7 +99,7 @@ Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
 
-        if ((Depths.find({type: 'sonic'}).count() > 0) && (!hourDepthsRunning)) {
+        if (DO_SONIC && (Depths.find({type: 'sonic'}).count() > 0) && (!hourDepthsRunning)) {
             console.log("call hourly...");
             hourDepthsRunning = true;
             const results = await Meteor.callAsync('hourDepths');
@@ -171,7 +172,7 @@ Template.hourly.onRendered (() => {
                 size: {
                     height: 200
                 },
-                bindto: "#hourlyChart"
+                bindto: "#hourlySonicChart"
             });
             hourDepthsRunning = false;
         }
@@ -205,7 +206,7 @@ Template.hourly.onRendered (() => {
                 averages.push(gallonsInTanksPressure(depth.sum/depth.readings, depth.time));
             });
 
-            console.log("Generate UltraSonic Sensor Chart");
+            console.log("Generate Pressure Sensor Chart");
             var chart = bb.generate({
                 title: {
                     text: "Pressure Sensor"
@@ -253,7 +254,7 @@ Template.hourly.onRendered (() => {
                 size: {
                     height: 200
                 },
-                bindto: "#hourlySonicChart"
+                bindto: "#hourlyPressureChart"
             });
             hourDepths2Running = false;
         }
