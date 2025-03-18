@@ -10,7 +10,7 @@ import '/imports/startup/both';
 
 
 try {
-    console.log("M", M.AutoInit);
+    //console.log("M", M.AutoInit);
 } catch (error) {
     console.log("Error", error);
 }
