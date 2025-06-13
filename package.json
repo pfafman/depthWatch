@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "chai": "^5.2.0"
+  },
+  "meteor": {
+    "modern": true
   }
 }

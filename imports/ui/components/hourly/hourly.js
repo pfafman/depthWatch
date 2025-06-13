@@ -54,15 +54,15 @@ Template.hourly.onRendered (() => {
                         ["max",   max]
                     ],
                     type: gauge(), // for ESM specify as: gauge()
-                    onclick: function (d, i) {
-                        console.log("onclick", d, i);
-                    },
-                    onover: function (d, i) {
-                        console.log("onover", d, i);
-                    },
-                    onout: function (d, i) {
-                        console.log("onout", d, i);
-                    }
+                    // onclick: function (d, i) {
+                    //     console.log("onclick", d, i);
+                    // },
+                    // onover: function (d, i) {
+                    //     console.log("onover", d, i);
+                    // },
+                    // onout: function (d, i) {
+                    //     console.log("onout", d, i);
+                    // }
                   },
                   gauge: {
                     type: "multi",
