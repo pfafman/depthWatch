@@ -6,8 +6,8 @@
     "test": "meteor test --once --driver-package meteortesting:mocha"
   },
   "dependencies": {
-    "@babel/plugin-transform-class-static-block": "^7.27.1",
-    "@babel/runtime": "^7.28.2",
+    "@babel/plugin-transform-class-static-block": "^7.28.3",
+    "@babel/runtime": "^7.28.3",
     "@materializecss/materialize": "^2.2.2",
     "billboard.js": "^3.16.0",
     "d3": "^7.9.0",
