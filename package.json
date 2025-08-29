@@ -12,11 +12,11 @@
     "billboard.js": "^3.16.0",
     "d3": "^7.9.0",
     "jquery": "^3.7.1",
-    "meteor-node-stubs": "^1.2.22",
+    "meteor-node-stubs": "^1.2.24",
     "moment": "^2.30.1"
   },
   "devDependencies": {
-    "chai": "^5.2.1"
+    "chai": "^6.0.1"
   },
   "meteor": {
     "modern": true
