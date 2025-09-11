@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-class-static-block": "^7.28.3",
-    "@babel/runtime": "^7.28.3",
+    "@babel/runtime": "^7.28.4",
     "@materializecss/materialize": "^2.2.2",
     "billboard.js": "^3.16.0",
     "d3": "^7.9.0",
