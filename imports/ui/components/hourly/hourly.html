@@ -4,15 +4,13 @@
     {{#if haveCurrentDepth}}
       <div class="flow-text current">
         Current reading is {{currentDepth}} inches in tank {{age}}, 
-        <br/>
-        Sonic: {{currentDepthSonic}} inches down {{currentHeight}} inches of water in tank 
+        
         {{#if overCapacity}}
           {{#if overFlow}}
             &nbsp; <a class="btn-small pulse red"><i class="material-icons">water</i></a>
           {{else}}
             &nbsp; <a class="btn-small pulse yellow"><i class="material-icons">water</i></a>
           {{/if}}
-          &nbsp; <i class="smaller">Sonic Sensor reading is {{currentReadingSonic}} inches</i>
           &nbsp; <i class="smaller">Pressure Sensor reading is {{currentReadingPressure}} inches</i>
         {{/if}}
       </div>
