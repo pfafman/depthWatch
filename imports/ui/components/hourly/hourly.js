@@ -271,6 +271,10 @@ Template.hourly.helpers({
     },
 
 
+    tankDepth() {
+        return (tankDepth);
+    },
+
     haveCurrentDepth() {
         const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         return (current != null);
@@ -281,6 +285,15 @@ Template.hourly.helpers({
         const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return current.exit.toFixed(2);
+        } else {
+            return "N/A";
+        }
+    },
+
+    currentDown() {
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return (tankDepth - current.exit).toFixed(2);
         } else {
             return "N/A";
         }

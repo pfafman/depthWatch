@@ -3,7 +3,7 @@
   {{#if Template.subscriptionsReady}}
     {{#if haveCurrentDepth}}
       <div class="flow-text current">
-        Current reading is {{currentDepth}} inches in tank {{age}}, 
+        Current reading is {{currentDepth}} out of {{tankDepth}} inches in tank {{age}}, down {{currentDown}} inches 
         
         {{#if overCapacity}}
           {{#if overFlow}}
