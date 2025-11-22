@@ -109,6 +109,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     check(this.bodyParams.depth, Number);
     
     let depth = Math.round(Number(this.bodyParams.depth)*100.0)/100;
+    let host = this.bodyParams.host;
     let reading = depth;
 
     if ((depth > 80) || (depth <= 0)) {
@@ -134,7 +135,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     console.log("insertPressureDepth", depth);
     
     try {
-      let lastRec = await Depths.findOneAsync({'type':'pressure'},{'sort':{'time':-1}});
+      let lastRec = await Depths.findOneAsync({'type':'pressure', 'host':host},{'sort':{'time':-1}});
       //console.log("lastRec", lastRec);
 
       if (lastRec != null) {
@@ -152,7 +153,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     }
 
     const time = moment().startOf('minute').toDate();
-    let rec = await Depths.findOneAsync({'time': time, 'type':'pressure'});
+    let rec = await Depths.findOneAsync({'time': time, 'type':'pressure', 'host':host});
 
     if (rec != null) {
       rec['exit'] = depth;
@@ -172,6 +173,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
       delete rec['_id']
     } else {
       rec = {
+        'host'         : host
         'time'         : time,
         'enter'        : depth,
         'max'          : depth,
@@ -187,6 +189,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     }
 
     await Depths.upsertAsync({
+      'host': host
       'time': time
     },
     {
