@@ -7,12 +7,13 @@ import moment from 'moment';
 
 Meteor.methods({
 
-  async dayDepths () {
+  async dayDepths (host) {
 
       const pipeline = [
         {
           $match: {
-            type: 'pressure'
+            type: 'pressure',
+            host: host
           }
         },
         {
@@ -154,7 +155,8 @@ Meteor.methods({
       return result;
   },
 
-  async hourDepths () {
+
+  async hourDepthsSonic () {
 
       //console.log("hourDepths: called");
 
@@ -224,7 +226,7 @@ Meteor.methods({
   },
 
 
-  async hourDepthsPressure () {
+  async hourDepths (host) {
 
       //console.log("hourDepths: called");
 
@@ -234,7 +236,8 @@ Meteor.methods({
             {
               $gt: moment().subtract(5, 'days').startOf('day').toDate()
             },
-            type: 'pressure'
+            type: 'pressure',
+            host: host
           }
         },
         {

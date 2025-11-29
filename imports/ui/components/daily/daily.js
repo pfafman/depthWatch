@@ -29,7 +29,7 @@ Template.daily.onRendered (() => {
 
             console.log("update daily ...", await Depths.find({}).count());
 
-            const results = await Meteor.callAsync('dayDepths');
+            const results = await Meteor.callAsync('dayDepths', 'piCistern');
 
             //console.log("update daily", results);
             

@@ -173,7 +173,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
       delete rec['_id']
     } else {
       rec = {
-        'host'         : host
+        'host'         : host,
         'time'         : time,
         'enter'        : depth,
         'max'          : depth,
@@ -189,7 +189,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     }
 
     await Depths.upsertAsync({
-      'host': host
+      'host': host,
       'time': time
     },
     {

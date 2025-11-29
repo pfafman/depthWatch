@@ -102,7 +102,7 @@ Template.hourly.onRendered (() => {
         if (DO_SONIC && (Depths.find({type: 'sonic'}).count() > 0) && (!hourDepthsRunning)) {
             console.log("call hourly...");
             hourDepthsRunning = true;
-            const results = await Meteor.callAsync('hourDepths');
+            const results = await Meteor.callAsync('hourDepthsSonic');
             console.log("update hourly", results.length, results[0]);
 
             //daysOld.set(results[0]);
@@ -184,7 +184,7 @@ Template.hourly.onRendered (() => {
         if ((Depths.find({type: 'pressure'}).count() > 0) && (!hourDepths2Running)) {
             console.log("call hourly...");
             hourDepths2Running = true;
-            const results = await Meteor.callAsync('hourDepthsPressure');
+            const results = await Meteor.callAsync('hourDepths', 'piCistern');
             console.log("update pressure hourly", results.length, results[0]);
 
             daysOld.set(results[0]);
@@ -282,7 +282,7 @@ Template.hourly.helpers({
 
 
     currentDepth() {
-        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return current.exit.toFixed(2);
         } else {
