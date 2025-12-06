@@ -460,7 +460,12 @@ Template.hourly.helpers({
     },
 
     capacity() {
-        return capacity.toLocaleString('us', {maximumFractionDigits: 0})
+        return (capacity).toLocaleString('us', {maximumFractionDigits: 0})
+    }
+
+
+    noAccess() {
+        return (noAccessGallons).toLocaleString('us', {maximumFractionDigits: 0})
     }
 });
 

@@ -1,18 +1,22 @@
 import moment from 'moment';
 
-tankDepth = 59;
-tankCapacity = 3236;
+const tankDepth = 59;
+const tankCapacity = 3236;
 
-gallonsPerInch = 3 * tankCapacity/tankDepth;  // 164.542
+const gallonsPerInch = 3 * tankCapacity/tankDepth;  // 164.542
 
-oldMaxDepth    = 57;   // Where Sensor was
-newMaxDepth = 67;      // Where Sensor is
+const oldMaxDepth = 57;   // Where Sensor was
+const newMaxDepth = 67;   // Where Sensor is
 
-minValidReading = 66.8 - 59;  // 7.8 inches
+const minValidReading = 66.8 - 59;  // 7.8 inches
 
-capacity = tankCapacity * 3; 
+const capacity = tankCapacity * 3; 
 
-offset = 0.5*gallonsPerInch*2/3;
+const offset = 0.5*gallonsPerInch*2/3;
+
+const tank2Offset = 11.23;  // tank 2 and 3 offset from tank 1
+
+const noAccessGallons = 11.23 * gallonsPerInch/3;
 
 
 gallonsInTanks = (sensorReading, time) => {
@@ -61,11 +65,11 @@ gallonsInTanksPressure = (time, tank1, tank2, tank3) => {
     }
 
     if (tank1 > 59) {
-        gallons = capacity;
+        gallons = capacity - noAccessGallons;
     } else if (tank1 < 0) {
         gallons = 0;
     } else {
-        gallons = (tank1  + tank2 + tank3) * gallonsPerInch/3;
+        gallons = (tank1  + tank2 + tank3) * gallonsPerInch/3 - noAccessGallons;
     }
 
     return Math.round(gallons);
