@@ -198,12 +198,12 @@ Template.hourly.onRendered (() => {
                 times.push(depth.time);
 
                 data.push([
-                    gallonsInTanksPressure(depth.enter, depth.time),
-                    gallonsInTanksPressure(depth.max,   depth.time),
-                    gallonsInTanksPressure(depth.min,   depth.time),
-                    gallonsInTanksPressure(depth.exit,  depth.time)
+                    gallonsInTanksPressure(depth.time, depth.enter),
+                    gallonsInTanksPressure(depth.time, depth.max),
+                    gallonsInTanksPressure(depth.time, depth.min),
+                    gallonsInTanksPressure(depth.time, depth.exit)
                     ]);
-                averages.push(gallonsInTanksPressure(depth.sum/depth.readings, depth.time));
+                averages.push(gallonsInTanksPressure(depth.time, depth.sum/depth.readings));
             });
 
             console.log("Generate Pressure Sensor Chart");
@@ -365,7 +365,7 @@ Template.hourly.helpers({
     gallons() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  gallonsInTanksPressure(current.exit, current.time);
+            const gallons =  gallonsInTanksPressure(current.time, current.exit);
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -375,7 +375,7 @@ Template.hourly.helpers({
     down() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const down =  capacity - gallonsInTanksPressure(current.exit, current.time);
+            const down =  capacity - gallonsInTanksPressure(current.time, current.exit);
             return down.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -385,7 +385,7 @@ Template.hourly.helpers({
 
     isDown() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        if ((current != null)  && (gallonsInTanksPressure(current.exit, current.time) < capacity)) {
+        if ((current != null)  && (gallonsInTanksPressure(current.time, current.exit) < capacity)) {
             return true;
         } else {
             return false;
@@ -418,7 +418,7 @@ Template.hourly.helpers({
             
             if ((current != null) && (oldest != null)) {
                 console.log("change", oldest.exit, "->", current.exit, gallonsInTanks(oldest.exit, oldest.time), '->', gallonsInTanks(current.exit, current.time));
-                let gallons =  gallonsInTanksPressure(current.exit, current.time) - gallonsInTanksPressure(oldest.exit, oldest.time);
+                let gallons =  gallonsInTanksPressure(current.time, current.exit) - gallonsInTanksPressure(oldest.time, oldest.exit);
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
@@ -441,7 +441,7 @@ Template.hourly.helpers({
             const oldest  = Depths.findOne({type: 'pressure', host: 'piCistern', time: {$gte: moment(current.time).subtract(6, 'hours').toDate()}},{ sort: {time: 1}, limit:1 });
             if ((current != null) && (oldest != null)) {
                 console.log("change4", oldest.exit, "->", current.exit);
-                let gallons =  gallonsInTanksPressure(current.exit, current.time) - gallonsInTanksPressure(oldest.exit, oldest.time); 
+                let gallons =  gallonsInTanksPressure(current.time, current.exit) - gallonsInTanksPressure(oldest.time, oldest.exit); 
                 const duration = moment.duration(moment(current.time).diff(moment(oldest.time))).humanize();
                 if (gallons < 0) {
                     trend = "Down";
