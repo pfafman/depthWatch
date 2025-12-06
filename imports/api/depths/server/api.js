@@ -104,7 +104,7 @@ Api.addRoute('insertDepth', {authRequired: false}, {
 Api.addRoute('insertPressureDepth', {authRequired: false}, {
   post: async function() {
     
-    console.log("insertPressureDepth", this.bodyParams);
+    console.log("insertPressureDepth: post ->", this.bodyParams);
 
     check(this.bodyParams.depth, Number);
     
@@ -132,7 +132,6 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
       overCapacity = true;
     }
 
-    console.log("insertPressureDepth", depth);
     
     try {
       let lastRec = await Depths.findOneAsync({'type':'pressure', 'host':host},{'sort':{'time':-1}});
@@ -171,7 +170,9 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
       }
       rec['overFlow'] = overFlow || rec['overFlow']
       delete rec['_id']
+      console.log("insertPressureDepth: update rec", host, time, depth);
     } else {
+      console.log("insertPressureDepth: new    rec", host, time, depth);
       rec = {
         'host'         : host,
         'time'         : time,
