@@ -15,11 +15,14 @@
         {{/if}}
       </div>
       <div class="flow-text current">
-        {{#if haveRange}}
+        <!--{{#if haveRange}}
           <span class="range"> &nbsp; Range {{minHeight}} -> {{maxHeight}}</span>
         {{/if}}
         <br/>
-        {{gallons}} out of {{capacity}} gallons{{#if isDown}}, down {{down}} gallons{{/if}} <i>Note: Cannot access {{noAccess}} gallons</i>   
+        -->
+        {{gallons}} out of {{capacity}} gallons{{#if isDown}}, down {{down}} gallons{{/if}} 
+        <br/>
+        <small><i>Note: Cannot access {{noAccess}} gallons</i></small>  
       </div>
     {{/if}}
     
