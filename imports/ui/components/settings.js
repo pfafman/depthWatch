@@ -1,22 +1,22 @@
 import moment from 'moment';
 
-const tankDepth = 59;
-const tankCapacity = 3236;
+tankDepth = 59;
+tankCapacity = 3236;
 
-const gallonsPerInch = 3 * tankCapacity/tankDepth;  // 164.542
+gallonsPerInch = 3 * tankCapacity/tankDepth;  // 164.542
 
-const oldMaxDepth = 57;   // Where Sensor was
-const newMaxDepth = 67;   // Where Sensor is
+oldMaxDepth = 57;   // Where Sensor was
+newMaxDepth = 67;   // Where Sensor is
 
-const minValidReading = 66.8 - 59;  // 7.8 inches
+minValidReading = 66.8 - 59;  // 7.8 inches
 
-const capacity = tankCapacity * 3; 
+capacity = tankCapacity * 3; 
 
-const offset = 0.5*gallonsPerInch*2/3;
+offset = 0.5*gallonsPerInch*2/3;
 
-const tank2Offset = 11.23;  // tank 2 and 3 offset from tank 1
+tank2Offset = 11.23;  // tank 2 and 3 offset from tank 1
 
-const noAccessGallons = 11.23 * gallonsPerInch/3;
+noAccessGallons = 2 * 11.23 * gallonsPerInch/3;
 
 
 gallonsInTanks = (sensorReading, time) => {

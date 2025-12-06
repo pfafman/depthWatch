@@ -40,18 +40,16 @@ Template.hourly.onRendered (() => {
 
             if (current != null) {
                 
-                const percent = 100*(current.exit)/tankDepth;
-                const min = 100*(newMaxDepth - range[0].max)/tankDepth;
-                const max = 100*(newMaxDepth - range[0].min)/tankDepth;
+                const percent = 100*gallonsInTanksPressure(current.time, current.exit)/capacity;
+                const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
+                const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
                 minHeight.set(newMaxDepth - range[0].max);
                 maxHeight.set(newMaxDepth - range[0].min);
 
                 var gaugeChart = bb.generate({
                   data: {
                     columns: [
-                        ["min",   min],
-                        ["Level", percent],
-                        ["max",   max]
+                        ["Level", percent]
                     ],
                     type: gauge(), // for ESM specify as: gauge()
                     // onclick: function (d, i) {
@@ -460,12 +458,12 @@ Template.hourly.helpers({
     },
 
     capacity() {
-        return (capacity).toLocaleString('us', {maximumFractionDigits: 0})
-    }
+        return capacity.toLocaleString('us', {maximumFractionDigits: 0})
+    },
 
 
     noAccess() {
-        return (noAccessGallons).toLocaleString('us', {maximumFractionDigits: 0})
+        return noAccessGallons.toLocaleString('us', {maximumFractionDigits: 0})
     }
 });
 

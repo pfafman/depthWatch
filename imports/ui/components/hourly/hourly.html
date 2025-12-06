@@ -3,7 +3,7 @@
   {{#if Template.subscriptionsReady}}
     {{#if haveCurrentDepth}}
       <div class="flow-text current">
-        Current reading is {{currentDepth}} out of {{tankDepth}} inches in tank {{age}}, down {{currentDown}} inches 
+        Current reading is {{currentDepth}} out of {{tankDepth}} inches in tank1 {{age}}, down {{currentDown}} inches 
         
         {{#if overCapacity}}
           {{#if overFlow}}
@@ -19,7 +19,7 @@
           <span class="range"> &nbsp; Range {{minHeight}} -> {{maxHeight}}</span>
         {{/if}}
         <br/>
-        {{gallons}} out of {{capacity}} gallons{{#if isDown}}, down {{down}} gallons{{/if}} <i>Note: Cannot access {{noAccess}} gallons</i>i>   
+        {{gallons}} out of {{capacity}} gallons{{#if isDown}}, down {{down}} gallons{{/if}} <i>Note: Cannot access {{noAccess}} gallons</i>   
       </div>
     {{/if}}
     
