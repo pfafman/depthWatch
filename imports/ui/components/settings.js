@@ -55,7 +55,7 @@ gallonsInTanksPressure = (time, tank1, tank2, tank3) => {
     let theMaxDepth = newMaxDepth;
 
     if (tank2 === undefined) {
-        tank2 = tank1 + 11.23;
+        tank2 = tank1 + tank2Offset;
     }
 
     if (tank3 === undefined) {
