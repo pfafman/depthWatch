@@ -153,9 +153,9 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
 
     const time = moment().startOf('minute').toDate();
     let rec = await Depths.findOneAsync({'time': time, 'type':'pressure', 'host':host});
-    console.log("insertPressureDepth find current rec", time, host, rec['exit']);
 
     if (rec != null) {
+      console.log("insertPressureDepth found current rec", time, host, rec['exit']);
       rec['exit'] = depth;
       if (depth > rec['max'] ) rec['max'] = depth;
       if (depth < rec['min'] ) rec['min'] = depth;

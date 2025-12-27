@@ -14,9 +14,20 @@ capacity = tankCapacity * 3;
 
 offset = 0.5*gallonsPerInch*2/3;
 
-tank2Offset = 11.23;  // tank 2 and 3 offset from tank 1
 
-noAccessGallons = 2 * 11.23 * gallonsPerInch/3;
+/********************
+ * 
+ *  Tank Offsets
+ * 
+ *   2025-10    :   11.23"
+ *   2-25-12-27 :   14"
+ * 
+ * 
+ */
+
+tank2Offset = 14;  // See Above3
+
+noAccessGallons = 2 * tank2Offset * gallonsPerInch/3;
 
 
 gallonsInTanks = (sensorReading, time) => {
