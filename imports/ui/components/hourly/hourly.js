@@ -33,6 +33,7 @@ Template.hourly.onRendered (() => {
         if (Depths.find({}).count() > 0) {
 
             current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 })
+            current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 })
 
             const range = await Meteor.callAsync('depthRange');
 
@@ -40,7 +41,7 @@ Template.hourly.onRendered (() => {
 
             if (current != null) {
                 
-                const percent = 100*gallonsInTanksPressure(current.time, current.exit)/capacity;
+                const percent = 100*gallonsInTanksPressure(current.time, current.exit, current2.exit)/capacity;
                 const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
                 const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
                 minHeight.set(newMaxDepth - range[0].max);
@@ -288,10 +289,38 @@ Template.hourly.helpers({
         }
     },
 
+    currentDepth2() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.exit.toFixed(2);
+        } else {
+            return "N/A";
+        }
+    },
+
     currentDown() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return (tankDepth - current.exit).toFixed(2);
+        } else {
+            return "N/A";
+        }
+    },
+
+    currentDown2() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return (tankDepth - current.exit).toFixed(2);
+        } else {
+            return "N/A";
+        }
+    },
+
+    tankOffset() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current2 != null)) {
+            return (current2.exit - current.exit).toFixed(2);
         } else {
             return "N/A";
         }
@@ -362,8 +391,9 @@ Template.hourly.helpers({
 
     gallons() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  gallonsInTanksPressure(current.time, current.exit);
+            const gallons =  gallonsInTanksPressure(current.time, current.exit, current2.exit);
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -372,8 +402,9 @@ Template.hourly.helpers({
 
     down() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const down =  capacity - gallonsInTanksPressure(current.time, current.exit);
+            const down =  capacity - gallonsInTanksPressure(current.time, current.exit, current2.exit);
             return down.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
