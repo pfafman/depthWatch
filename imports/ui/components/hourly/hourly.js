@@ -16,6 +16,7 @@ const daysOld   = new ReactiveVar(null);
 
 let hourDepthsRunning  = false;
 let hourDepths2Running = false;
+let hourDepths3Running = false;
 
 let DO_SONIC = false
 
@@ -256,6 +257,89 @@ Template.hourly.onRendered (() => {
                 bindto: "#hourlyPressureChart"
             });
             hourDepths2Running = false;
+        }
+    
+    });
+
+
+    Tracker.autorun(async () => {
+
+        if ((Depths.find({type: 'pressure', host: 'piCistern2'}).count() > 0) && (!hourDepths3Running)) {
+            console.log("call hourly cistern2 depths ...");
+            hourDepths3Running = true;
+            const results = await Meteor.callAsync('hourDepths', 'piCistern2');
+            console.log("update pressure hourly", results.length, results[0]);
+
+            daysOld.set(results[0]);
+            
+            let times = ["times"];
+            let data = ["Depth"];
+            let averages = ["Average"];
+            results.forEach( depth => {
+
+                //console.log(depth);
+                times.push(depth.time);
+
+                data.push([
+                    depth.enter,
+                    depth.max,
+                    depth.min,
+                    depth.exit
+                    ]);
+                averages.push(depth.sum/depth.readings);
+            });
+
+            console.log("Generate Tank3 Depth Chart");
+            var chart = bb.generate({
+                title: {
+                    text: "Tank 3 Depth"
+                },
+                data: {
+                    x: "times",
+                    columns: [
+                        times,
+                        data
+                        //,
+                        //averages
+                    ],
+                    type: candlestick(),       // for ESM specify as: candlestick()
+                    // types: {
+                    //     Average: spline()
+                    // },
+                    colors: {
+                        'Average': "green"
+                    },
+                    labels: false
+                },
+                candlestick: {
+                    color: {
+                      down: "red"
+                    },
+                    width: {
+                      ratio: 0.5
+                    }
+                },
+                axis: {
+                    x: {
+                        type: "timeseries",
+                        tick: {
+                            format: "%I:00 %p"
+                        },
+                        padding: {
+                            left: 1,
+                            right: 1
+                        }
+                    },
+                    y2: {
+                        show: true
+                    }
+                },
+                size: {
+                    height: 200
+                },
+                bindto: "#hourlyTank3Chart"
+            });
+            hourDepths3Running = false;
         }
     
     });
