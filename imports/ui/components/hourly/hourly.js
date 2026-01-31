@@ -35,7 +35,7 @@ Template.hourly.onRendered (() => {
         if (Depths.find({}).count() > 0) {
 
             current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 })
-            current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 })
+            current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 })
 
             const range = await Meteor.callAsync('depthRange');
 
@@ -43,7 +43,7 @@ Template.hourly.onRendered (() => {
 
             if (current != null) {
                 
-                const percent = 100*gallonsInTanksPressure(current.time, current.exit, current2.exit)/capacity;
+                const percent = 100*gallonsInTanksPressure(current.time, current.exit, current3.exit)/capacity;
                 const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
                 const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
                 minHeight.set(newMaxDepth - range[0].max);
@@ -159,7 +159,7 @@ Template.hourly.onRendered (() => {
                     x: {
                         type: "timeseries",
                         tick: {
-                            format: "%I:00 %p"
+                            format: "%a %I:00 %p"
                         },
                         padding: {
                             left: 1,
@@ -241,7 +241,7 @@ Template.hourly.onRendered (() => {
                     x: {
                         type: "timeseries",
                         tick: {
-                            format: "%I:00 %p"
+                            format: "%a %I:00 %p"
                         },
                         padding: {
                             left: 1,
@@ -265,10 +265,10 @@ Template.hourly.onRendered (() => {
 
     Tracker.autorun(async () => {
 
-        if ((Depths.find({type: 'pressure', host: 'piCistern2'}).count() > 0) && (!hourDepths3Running)) {
+        if ((Depths.find({type: 'pressure', host: 'piCistern3'}).count() > 0) && (!hourDepths3Running)) {
             console.log("call hourly cistern2 depths ...");
             hourDepths3Running = true;
-            const results = await Meteor.callAsync('hourDepths', 'piCistern2');
+            const results = await Meteor.callAsync('hourDepths', 'piCistern3');
             console.log("update pressure hourly", results.length, results[0]);
 
             daysOld.set(results[0]);
@@ -324,7 +324,7 @@ Template.hourly.onRendered (() => {
                     x: {
                         type: "timeseries",
                         tick: {
-                            format: "%I:00 %p"
+                            format: "%a %I:00 %p"
                         },
                         padding: {
                             left: 1,
@@ -406,7 +406,7 @@ Template.hourly.onRendered (() => {
                     x: {
                         type: "timeseries",
                         tick: {
-                            format: "%I:00 %p"
+                            format: "%a %I:00 %p"
                         },
                         padding: {
                             left: 1,
@@ -457,7 +457,7 @@ Template.hourly.helpers({
     },
 
     currentDepth2() {
-        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return current.exit.toFixed(2);
         } else {
@@ -475,7 +475,7 @@ Template.hourly.helpers({
     },
 
     currentDown2() {
-        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return (tankDepth - current.exit).toFixed(2);
         } else {
@@ -485,9 +485,9 @@ Template.hourly.helpers({
 
     tankOffset() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
-        if ((current != null) && (current2 != null)) {
-            return (current2.exit - current.exit).toFixed(2);
+        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current3 != null)) {
+            return (current3.exit - current.exit).toFixed(2);
         } else {
             return "N/A";
         }
@@ -558,9 +558,9 @@ Template.hourly.helpers({
 
     gallons() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const gallons =  gallonsInTanksPressure(current.time, current.exit, current2.exit);
+            const gallons =  gallonsInTanksPressure(current.time, current.exit, current3.exit);
             return gallons.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";
@@ -569,9 +569,9 @@ Template.hourly.helpers({
 
     down() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
-            const down =  capacity - gallonsInTanksPressure(current.time, current.exit, current2.exit);
+            const down =  capacity - gallonsInTanksPressure(current.time, current.exit, current3.exit);
             return down.toLocaleString('us', {maximumFractionDigits: 0})
         } else {
             return "";

@@ -4,6 +4,10 @@ import { Depths } from '../../../api/depths/depths.js';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 
+
+console.log('daily.js: imports');
+
+import '../settings.js';
 import './daily.html';
 
 const yearOldDepth    = new ReactiveVar(null);
@@ -13,6 +17,8 @@ const weekOldDay      = new ReactiveVar(null);
 const currentDayDepth = new ReactiveVar(null);
 const currentDay      = new ReactiveVar(null);
 
+
+console.log("daily.js: gallonsPerInch:",gallonsPerInch);
 
 Template.daily.onCreated (() => {
     //console.log("daily.onCreated");
@@ -41,7 +47,7 @@ Template.daily.onRendered (() => {
             let times = ["times"];
             let data = ["Gallons"]
             let change = ["Gallons"]
-            factor = gallonsPerInch;
+            let factor = gallonsPerInch;
             results.forEach( depth => {
                 //console.log(depth);
                 times.push(depth.time);

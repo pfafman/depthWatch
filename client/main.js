@@ -3,7 +3,7 @@
 //import '@materializecss/materialize';
 //import {M} from '@materializecss/materialize';
 
-
+console.log("Client Statup");
 
 import '/imports/startup/client';
 import '/imports/startup/both';

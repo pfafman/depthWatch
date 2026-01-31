@@ -1,3 +1,5 @@
+console.log("import settings.js");
+
 import moment from 'moment';
 
 tankDepth = 59;
