@@ -3,8 +3,10 @@
   {{#if Template.subscriptionsReady}}
     {{#if haveCurrentDepth}}
       <div class="flow-text current">
-        Current reading is {{currentDepth}} out of {{tankDepth}} inches in tank1 {{age}}, down {{currentDown}} inches 
-        
+        {{age}}, Tank1 down {{currentDown}} inches. 
+      </div>
+       <div class="flow-text current">
+        Tank1 has {{currentDepth}} inches, down {{currentDown}} inches out of {{tankDepth}} inches.
         {{#if overCapacity}}
           {{#if overFlow}}
             &nbsp; <a class="btn-small pulse red"><i class="material-icons">water</i></a>
@@ -15,7 +17,10 @@
         {{/if}}
       </div>
       <div class="flow-text current">
-        Tank3 has {{currentDepth2}} inches, down {{currentDown2}} inches.  Tank offset {{tankOffset}}
+        Tank2 has {{currentDepth2}} inches, down {{currentDown2}} inches.
+      </div>
+      <div class="flow-text current">
+        Tank3 has {{currentDepth3}} inches, down {{currentDown3}} inches.  Tank offset {{tankOffset}}
       </div>
       <div class="flow-text current">
         <!--{{#if haveRange}}
@@ -40,6 +45,8 @@
     <div id="hourlyPressureChart"></div>
 
     <div id="hourlyTank1Chart"></div>
+
+    <div id="hourlyTank2Chart"></div>
 
     <div id="hourlyTank3Chart"></div>
     <!-- <div id="hourlySonicChart"></div> -->

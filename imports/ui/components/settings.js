@@ -28,7 +28,7 @@ offset = 0.5*gallonsPerInch*2/3;
  * 
  */
 
-tank2Offset = 14;  // See Above3
+tank2Offset = 11;  // See Above3
 
 noAccessGallons = 2 * tank2Offset * gallonsPerInch/3;
 

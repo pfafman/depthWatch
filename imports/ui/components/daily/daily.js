@@ -10,13 +10,10 @@ console.log('daily.js: imports');
 import '../settings.js';
 import './daily.html';
 
-const yearOldDepth    = new ReactiveVar(null);
-const yearOldDay      = new ReactiveVar(null);
-const weekOldDepth    = new ReactiveVar(null);
-const weekOldDay      = new ReactiveVar(null);
-const currentDayDepth = new ReactiveVar(null);
-const currentDay      = new ReactiveVar(null);
-
+const yearOldDepth     = new ReactiveVar(null);
+const yearOldDay       = new ReactiveVar(null);
+const weekOldDayDepths = new ReactiveVar(null);
+const currentDayDepths = new ReactiveVar(null);
 
 console.log("daily.js: gallonsPerInch:",gallonsPerInch);
 
@@ -28,14 +25,16 @@ Template.daily.onRendered (() => {
 
     Tracker.autorun(async () => {
         
-
         console.log("autorun daily ...", Depths.find({}).count());
 
         if (Depths.find({}).count() >= 0) {
 
+
             console.log("update daily ...", await Depths.find({}).count());
 
             const results = await Meteor.callAsync('dayDepths', 'piCistern');
+            //const results2 = await Meteor.callAsync('dayDepths', 'piCistern2');
+            //const results3 = await Meteor.callAsync('dayDepths', 'piCistern3');
 
             //console.log("update daily", results);
             
@@ -43,6 +42,12 @@ Template.daily.onRendered (() => {
             let weekAgo = moment().subtract(2,'weeks');
             let yearAgo = moment().subtract(1,'year');
             console.log("now", now.toDate(), "last week", weekAgo.toDate());
+
+            let currentDepths = await Meteor.callAsync('dayDepth', now.toDate());
+            let weeksOldDepths = await Meteor.callAsync('dayDepth', weekAgo.toDate());
+            currentDayDepths.set(currentDepths)
+            weekOldDayDepths.set(weeksOldDepths)
+            console.log("Day Depths", currentDepths, weeksOldDepths)
             
             let times = ["times"];
             let data = ["Gallons"]
@@ -62,12 +67,6 @@ Template.daily.onRendered (() => {
                     ]);
                 change.push(diff)
 
-                if (weekOldDepth.get() == null) {
-                    if (moment(depth.time).isSameOrAfter(weekAgo)) {
-                        weekOldDepth.set(depth.sum/depth.readings);
-                        weekOldDay.set(depth.time);
-                    }
-                }
 
                 if (yearOldDepth.get() == null) {
                     if (moment(depth.time).isSameOrAfter(yearAgo)) {
@@ -76,8 +75,6 @@ Template.daily.onRendered (() => {
                     }
                 }
 
-                currentDayDepth.set(depth.sum/depth.readings);
-                currentDay.set(depth.time);
             });
 
             var chart = bb.generate({
@@ -204,17 +201,35 @@ Template.daily.helpers({
             return `Last year ${lastYearGallons} gallons`;
         }
     },
+
     trend() {
-        if (weekOldDepth.get() != null) {
-            let gallonsAveCurrent = gallonsInTanksPressure(currentDay.get(),currentDayDepth.get(), );
-            let gallonsAveWeekOld = gallonsInTanksPressure(weekOldDay.get(), weekOldDepth.get());
+        if ((weekOldDayDepths.get() != null) && (currentDayDepths.get() != null)) {
+
+            console.log("Calculate Trend");
+
+            current = currentDayDepths.get();
+            old = weekOldDayDepths.get();
+
+            //console.log("Trend:", current, old);
+
+            if (!current['piCistern2']) {
+                current['piCistern2'] = {};
+                current['piCistern2'].exit = current['piCistern3'].exit;
+            }
+
+            if (!old['piCistern2']) {
+                old['piCistern2'] = {};
+                old['piCistern2'].exit = old['piCistern3'].exit;
+            }
+
+            let gallonsAveCurrent = gallonsInTanksPressure(current['day'], current['piCistern'].exit, current['piCistern2'].exit, current['piCistern3'].exit);
+            let gallonsAveWeekOld = gallonsInTanksPressure(old['day'], old['piCistern'].enter, old['piCistern3'].enter, old['piCistern3'].enter);
             let change = gallonsAveCurrent - gallonsAveWeekOld
-            console.log("Trend", change, currentDay.get(), weekOldDay.get());
             
-            let days = moment.duration(moment(currentDay.get()).diff(moment(weekOldDay.get()))).days();
-            console.log("Trend", days, "days", change, currentDay.get(), weekOldDay.get());
+            let days = moment.duration(moment(current['day']).diff(moment(old['day']))).days();
+            console.log("Trend", days, "days", change, gallonsAveWeekOld, "->", gallonsAveCurrent, current['day'], old['day']);
             let trend = change/days;
-            let runOutDays = - (gallonsInTanksPressure(currentDay.get(), currentDayDepth.get())-noAccessGallons)/trend;
+            let runOutDays = - (gallonsAveCurrent-noAccessGallons)/trend;
             if (runOutDays > 0) {
                 runOutDate = (moment().add(runOutDays, 'days')).format('MMM Do, YYYY');
                 return `Two Week (${days.toFixed(1)} days) trend is down ${-trend.toFixed(0)} gallons per day (${gallonsAveWeekOld.toFixed(0)} ->  ${gallonsAveCurrent.toFixed(0)}).  Will last to ${runOutDate} at this rate.`;

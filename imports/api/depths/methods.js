@@ -7,6 +7,80 @@ import moment from 'moment';
 
 Meteor.methods({
 
+  async dayDepth (date) {
+
+    console.log("dayDepth Called for", date);
+    const pipeline = [
+      {
+        $match: {
+          type: 'pressure',
+          time: {
+            $gte: moment(date).startOf('day').toDate(),
+            $lte: moment(date).endOf('day').toDate()
+          }
+        }
+      },
+      {
+        $group: {
+          '_id': {
+            'host': "$host"
+          },
+          'enter': {
+            $first: "$enter"
+          },
+          'max': {
+            $max: "$max"
+          },
+          'min': {
+            $min: "$min"
+          },
+          'exit': {
+            $last: "$exit"
+          },
+          'maxAve': {
+            $avg: "$max"
+          },
+          'minAve': {
+            $avg: "$min"
+          },
+          'sum': {
+            $sum: "$sum"
+          },
+          'readings': {
+            $sum: "$readings"
+          },
+          'time': {
+            $first: "$time"
+          }
+        }
+      },
+      {
+        $project: {
+          _id:        0,
+          "host":    "$_id.host",
+          "enter":    1,
+          "max":      1,
+          "min":      1,
+          "exit":     1,
+          "sum":      1,
+          "readings": 1
+        }
+      }
+    ];
+
+    let results = await Depths.aggregate(pipeline, {}).toArray();
+
+    let depths = {};
+    results.forEach((result) => {
+      depths[result.host] = result;
+    });
+
+    depths['day'] = date
+
+    console.log("dayDepth result for", date, depths);
+    return depths;
+  },
+
   async dayDepths (host) {
 
       const pipeline = [
