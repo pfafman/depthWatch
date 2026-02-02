@@ -10,15 +10,14 @@ console.log('daily.js: imports');
 import '../settings.js';
 import './daily.html';
 
-const yearOldDepth     = new ReactiveVar(null);
+const yearOldGallons   = new ReactiveVar(null);
 const yearOldDay       = new ReactiveVar(null);
 const weekOldDayDepths = new ReactiveVar(null);
 const currentDayDepths = new ReactiveVar(null);
 
-console.log("daily.js: gallonsPerInch:",gallonsPerInch);
 
 Template.daily.onCreated (() => {
-    //console.log("daily.onCreated");
+    console.log("daily.onCreated");
 });
 
 Template.daily.onRendered (() => {
@@ -29,50 +28,61 @@ Template.daily.onRendered (() => {
 
         if (Depths.find({}).count() >= 0) {
 
-
             console.log("update daily ...", await Depths.find({}).count());
 
-            const results = await Meteor.callAsync('dayDepths', 'piCistern');
-            //const results2 = await Meteor.callAsync('dayDepths', 'piCistern2');
-            //const results3 = await Meteor.callAsync('dayDepths', 'piCistern3');
-
-            //console.log("update daily", results);
+            const results = await Meteor.callAsync('dayDepthsAll');
             
             let now = moment();
             let weekAgo = moment().subtract(2,'weeks');
             let yearAgo = moment().subtract(1,'year');
-            console.log("now", now.toDate(), "last week", weekAgo.toDate());
 
             let currentDepths = await Meteor.callAsync('dayDepth', now.toDate());
             let weeksOldDepths = await Meteor.callAsync('dayDepth', weekAgo.toDate());
             currentDayDepths.set(currentDepths)
             weekOldDayDepths.set(weeksOldDepths)
-            console.log("Day Depths", currentDepths, weeksOldDepths)
             
             let times = ["times"];
             let data = ["Gallons"]
-            let change = ["Gallons"]
             let factor = gallonsPerInch;
+            let cRec = {};
+            cRec.time = 0;
             results.forEach( depth => {
-                //console.log(depth);
-                times.push(depth.time);
-                
-                let diff = gallonsInTanksPressure(depth.time,  depth.exit) - gallonsInTanksPressure(depth.time, depth.enter);
 
-                data.push([
-                    gallonsInTanksPressure(depth.time, depth.enter),
-                    gallonsInTanksPressure(depth.time, depth.max),
-                    gallonsInTanksPressure(depth.time, depth.min),
-                    gallonsInTanksPressure(depth.time, depth.exit)
-                    ]);
-                change.push(diff)
+                if (cRec.time != depth.time) {
+                    if (cRec.time != 0) {
+                        // New Rec
+                        times.push(cRec.time);
+                        if (!cRec.piCistern3) {
+                            cRec.piCistern3 = {
+                                enter: undefined,
+                                max: undefined,
+                                min: undefined,
+                                exit: undefined
+                            }
+                        } 
+                        if (!cRec.piCistern2) {
+                            cRec.piCistern2 = cRec.piCistern3;
+                        }
+                        data.push([
+                            gallonsInTanksPressure(cRec.time, cRec.piCistern.enter, cRec.piCistern2.enter, cRec.piCistern3.enter),
+                            gallonsInTanksPressure(cRec.time, cRec.piCistern.max, cRec.piCistern2.max, cRec.piCistern3.max),
+                            gallonsInTanksPressure(cRec.time, cRec.piCistern.min, cRec.piCistern2.min, cRec.piCistern3.min),
+                            gallonsInTanksPressure(cRec.time, cRec.piCistern.exit, cRec.piCistern2.exit, cRec.piCistern3.exit)
+                            ]);
 
+                        if (yearOldGallons.get() == null) {
+                            if (moment(cRec.time).isSameOrAfter(yearAgo)) {
+                                yearOldGallons.set(gallonsInTanksPressure(cRec.time, cRec.piCistern.exit, cRec.piCistern2.exit, cRec.piCistern3.exit));
+                                yearOldDay.set(cRec.time);
+                            }
+                        }
 
-                if (yearOldDepth.get() == null) {
-                    if (moment(depth.time).isSameOrAfter(yearAgo)) {
-                        yearOldDepth.set(depth.sum/depth.readings);
-                        yearOldDay.set(depth.time);
                     }
+                    cRec = {};
+                    cRec.time = depth.time;
+                    cRec[depth.host] = depth;
+                } else {
+                    cRec[depth.host] = depth;
                 }
 
             });
@@ -129,7 +139,6 @@ Template.daily.onRendered (() => {
             let sdata = ["Gallons"]
             factor = gallonsPerInch;
             resultsSonic.forEach( depth => {
-                //console.log(depth);
                 stimes.push(depth.time);
                 
                 let diff = gallonsInTanks(depth.exit,  depth.time) - gallonsInTanks(depth.enter, depth.time);
@@ -205,12 +214,8 @@ Template.daily.helpers({
     trend() {
         if ((weekOldDayDepths.get() != null) && (currentDayDepths.get() != null)) {
 
-            console.log("Calculate Trend");
-
             current = currentDayDepths.get();
             old = weekOldDayDepths.get();
-
-            //console.log("Trend:", current, old);
 
             if (!current['piCistern2']) {
                 current['piCistern2'] = {};
@@ -227,7 +232,7 @@ Template.daily.helpers({
             let change = gallonsAveCurrent - gallonsAveWeekOld
             
             let days = moment.duration(moment(current['day']).diff(moment(old['day']))).days();
-            console.log("Trend", days, "days", change, gallonsAveWeekOld, "->", gallonsAveCurrent, current['day'], old['day']);
+            //console.log("Trend", days, "days", change, gallonsAveWeekOld, "->", gallonsAveCurrent, current['day'], old['day']);
             let trend = change/days;
             let runOutDays = - (gallonsAveCurrent-noAccessGallons)/trend;
             if (runOutDays > 0) {

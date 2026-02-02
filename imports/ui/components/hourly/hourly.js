@@ -12,8 +12,6 @@ import './hourly.html';
 const minHeight = new ReactiveVar(null);
 const maxHeight = new ReactiveVar(null);
 
-const daysOld   = new ReactiveVar(null);
-
 const sixHourDepthsData = new ReactiveVar(null);
 const sixDayDepthsData = new ReactiveVar(null);
 
@@ -36,98 +34,85 @@ Template.hourly.onRendered (() => {
     Tracker.autorun(async () => {
         console.log(`hourly: Found ${Depths.find({}).count()} measurements`);
 
-        if (Depths.find({}).count() > 0) {
+        try {
+            if (Depths.find({}).count() > 0) {
 
+                let sixHourData = await Meteor.callAsync('hourDepth', moment().subtract(6,'hours').startOf('hour').toDate());
+                sixHourDepthsData.set(sixHourData)
 
-            let sixHourData = await Meteor.callAsync('hourDepth', moment().subtract(6,'hours').startOf('hour').toDate());
-            sixHourDepthsData.set(sixHourData)
+                let sixDayData = await Meteor.callAsync('hourDepth', moment().subtract(6,'days').startOf('hour').toDate());
+                sixDayDepthsData.set(sixDayData)
 
-            let sixDayData = await Meteor.callAsync('hourDepth', moment().subtract(6,'days').startOf('hour').toDate());
-            sixDayDepthsData.set(sixDayData)
-
-            current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 })
-            current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 })
-            current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 })
-            
-            //console.log("current depths", current, current2, current3);
-            
-            const range = await Meteor.callAsync('depthRange');
-
-            //console.log("depth range", range[0].min, range[0].max);
-
-            if (current != null) {
+                current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 })
+                current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 })
+                current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 })
                 
-                const percent = 100*gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit)/capacity;
-                const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
-                const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
-                minHeight.set(newMaxDepth - range[0].max);
-                maxHeight.set(newMaxDepth - range[0].min);
+                const range = await Meteor.callAsync('depthRange');
 
-                var gaugeChart = bb.generate({
-                  data: {
-                    columns: [
-                        ["Level", percent]
-                    ],
-                    type: gauge(), // for ESM specify as: gauge()
-                    // onclick: function (d, i) {
-                    //     console.log("onclick", d, i);
-                    // },
-                    // onover: function (d, i) {
-                    //     console.log("onover", d, i);
-                    // },
-                    // onout: function (d, i) {
-                    //     console.log("onout", d, i);
-                    // }
-                  },
-                  gauge: {
-                    type: "multi",
-                    arcs: {
-                      minWidth: 40
-                    }
-                  },
-                  color: {
-                    pattern: [
-                      "#FF0000",
-                      "#FFFF00",
-                      "#FFA500",
-                      "#0055B3",
-                      "#00FF00"
-                    ],
-                    threshold: {
-                      values: [
-                        15,
-                        25,
-                        50,
-                        75,
-                        90
-                      ]
-                    }
-                  },
-                  size: {
-                    height: 200
-                  },
-                  bindto: "#gaugeChart"
-                });
+                if ((current != null) && (current2 != null) && (current3 != null)) {
+                    
+                    const percent = 100*gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit)/capacity;
+                    const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
+                    const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
+                    minHeight.set(newMaxDepth - range[0].max);
+                    maxHeight.set(newMaxDepth - range[0].min);
+
+                    var gaugeChart = bb.generate({
+                      data: {
+                        columns: [
+                            ["Level", percent]
+                        ],
+                        type: gauge(), // for ESM specify as: gauge()
+                      },
+                      gauge: {
+                        type: "multi",
+                        arcs: {
+                          minWidth: 40
+                        }
+                      },
+                      color: {
+                        pattern: [
+                          "#FF0000",
+                          "#FFFF00",
+                          "#FFA500",
+                          "#0055B3",
+                          "#00FF00"
+                        ],
+                        threshold: {
+                          values: [
+                            15,
+                            25,
+                            50,
+                            75,
+                            90
+                          ]
+                        }
+                      },
+                      size: {
+                        height: 200
+                      },
+                      bindto: "#gaugeChart"
+                    });
+                }
             }
+        } catch (error) {
+            console.error("Gauge Chart Error:", error);
         }
     });
+
 
     Tracker.autorun(async () => {
 
         if (DO_SONIC && (Depths.find({type: 'sonic'}).count() > 0) && (!hourDepthsRunning)) {
-            console.log("call hourly...");
+            console.log("call sonic hourly...");
             hourDepthsRunning = true;
             const results = await Meteor.callAsync('hourDepthsSonic');
-            console.log("update hourly", results.length, results[0]);
-
-            //daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Gallons"];
             let averages = ["Average"];
             results.forEach( depth => {
 
-                //console.log(depth);
                 times.push(depth.time);
 
                 data.push([
@@ -139,7 +124,6 @@ Template.hourly.onRendered (() => {
                 averages.push(gallonsInTanks(depth.sum/depth.readings, depth.time));
             });
 
-            console.log("Generate Pressure Sensor Chart");
             var chart = bb.generate({
                 title: {
                     text: "UltraSonic Sensor"
@@ -197,12 +181,9 @@ Template.hourly.onRendered (() => {
     Tracker.autorun(async () => {
 
         if ((Depths.find({type: 'pressure', host: 'piCistern'}).count() > 0) && (!hourDepths1Running)) {
-            console.log("call hourly...");
+            console.log("call pressure hourly...");
             hourDepths1Running = true;
             const results = await Meteor.callAsync('hourDepthsAll');
-            console.log("update pressure hourly", results.length, results[0]);
-
-            daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Gallons"];
@@ -214,6 +195,7 @@ Template.hourly.onRendered (() => {
                     if (cRec.time != 0) {
                         // New Rec
                         times.push(cRec.time);
+
                         if (!cRec.piCistern2) {
                             cRec.piCistern2 = cRec.piCistern3;
                         }
@@ -224,13 +206,13 @@ Template.hourly.onRendered (() => {
                             gallonsInTanksPressure(cRec.time, cRec.piCistern.exit, cRec.piCistern2.exit, cRec.piCistern3.exit)
                             ]);                
                     }
+                    cRec = {};
                     cRec.time = depth.time;
                     cRec[depth.host] = depth;
                 } else {
                     cRec[depth.host] = depth;
                 }
 
-                
             });
 
             console.log("Generate Pressure Sensor Chart");
@@ -286,19 +268,15 @@ Template.hourly.onRendered (() => {
     Tracker.autorun(async () => {
 
         if ((Depths.find({type: 'pressure', host: 'piCistern2'}).count() > 0) && (!hourDepths2Running)) {
-            console.log("call hourly cistern2 depths !!!!!!! ...");
+            console.log("call hourly cistern2 depths...");
             hourDepths2Running = true;
             const results = await Meteor.callAsync('hourDepths', 'piCistern2');
-            console.log("update pressure hourly", results.length, results[0]);
-
-            daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Depth"];
             let averages = ["Average"];
             results.forEach( depth => {
 
-                //console.log(depth);
                 times.push(depth.time);
 
                 data.push([
@@ -371,16 +349,12 @@ Template.hourly.onRendered (() => {
             console.log("call hourly cistern3 depths ...");
             hourDepths3Running = true;
             const results = await Meteor.callAsync('hourDepths', 'piCistern3');
-            console.log("update pressure hourly", results.length, results[0]);
-
-            daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Depth"];
             let averages = ["Average"];
             results.forEach( depth => {
 
-                //console.log(depth);
                 times.push(depth.time);
 
                 data.push([
@@ -453,16 +427,12 @@ Template.hourly.onRendered (() => {
             console.log("call hourly cistern depths ...");
             hourDepths4Running = true;
             const results = await Meteor.callAsync('hourDepths', 'piCistern');
-            console.log("update pressure hourly", results.length, results[0]);
-
-            daysOld.set(results[0]);
             
             let times = ["times"];
             let data = ["Depth"];
             let averages = ["Average"];
             results.forEach( depth => {
 
-                //console.log(depth);
                 times.push(depth.time);
 
                 data.push([
@@ -484,13 +454,8 @@ Template.hourly.onRendered (() => {
                     columns: [
                         times,
                         data
-                        //,
-                        //averages
                     ],
                     type: candlestick(),       // for ESM specify as: candlestick()
-                    // types: {
-                    //     Average: spline()
-                    // },
                     colors: {
                         'Average': "green"
                     },
@@ -731,35 +696,44 @@ Template.hourly.helpers({
 
     change1() {
 
-        const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
-        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        try {
+            const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+            const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+            const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
 
-        if (!current2) {
-            current2 = current3;
-        }
+            if (current != null) {
+                if (!current2) {
+                    current2 = current3;
+                }
 
-        let sixHourDepths = sixHourDepthsData.get();
-        
-        if (!sixHourDepths["piCistern2"]) {
-            sixHourDepths['piCistern2'] = sixHourDepths['piCistern3'];
-        }
+                let sixHourDepths = sixHourDepthsData.get();
+                
+                if ((sixHourDepths != null) && !sixHourDepths["piCistern2"]) {
+                    sixHourDepths['piCistern2'] = sixHourDepths['piCistern3'];
+                }
 
-            
-        if ((current != null) && (sixHourDepths != null)) {
-            let gallons =  gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit) - 
-                gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].enter, sixHourDepths['piCistern2'].enter, sixHourDepths['piCistern3'].enter);
-            const duration = moment.duration(moment(current.time).diff(moment(sixHourDepths['date']))).humanize();
-            console.log("change1", gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].exit, sixHourDepths['piCistern2'].exit, sixHourDepths['piCistern3'].exit),
-                "->", gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit), duration, sixHourDepths);
-            if (gallons < 0) {
-                trend = "Down";
-                gallons = - gallons;
+                    
+                if ((current != null) && (sixHourDepths != null)) {
+                    let gallons =  gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit) - 
+                        gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].enter, sixHourDepths['piCistern2'].enter, sixHourDepths['piCistern3'].enter);
+                    const duration = moment.duration(moment(current.time).diff(moment(sixHourDepths['date']))).humanize();
+                    // console.log("change1", gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].exit, sixHourDepths['piCistern2'].exit, sixHourDepths['piCistern3'].exit),
+                    //     "->", gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit), duration, sixHourDepths);
+                    if (gallons < 0) {
+                        trend = "Down";
+                        gallons = - gallons;
+                    } else {
+                        trend = "Up";
+                    }
+                    return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
+                } else {
+                    return "";
+                }
             } else {
-                trend = "Up";
+                return "";
             }
-            return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
-        } else {
+        } catch (error) {
+            console.error("change1 error", error);
             return "";
         }
         
@@ -767,38 +741,44 @@ Template.hourly.helpers({
 
     change2() {
 
-        const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
-        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        try {
+            const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+            const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+            const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
 
-        if (!current2) {
-            current2 = current3;
-        }
+            if (current != null) {
 
-        let sixHourDepths = sixDayDepthsData.get()
-        if (!sixHourDepths['piCistern2']) {
-            sixHourDepths['piCistern2'] = sixHourDepths['piCistern3'];
-        }
-
-        if (current != null) {
-            
-            if ((current != null) && (sixHourDepths != null)) {
-                let gallons =  gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit) - 
-                    gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].enter, sixHourDepths['piCistern2'].enter, sixHourDepths['piCistern3'].enter);
-                const duration = moment.duration(moment(current.time).diff(moment(sixHourDepths['date']))).humanize();
-                console.log("change1", gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].exit, sixHourDepths['piCistern2'].exit, sixHourDepths['piCistern3'].exit),
-                    "->", gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit), duration);
-                if (gallons < 0) {
-                    trend = "Down";
-                    gallons = - gallons;
-                } else {
-                    trend = "Up";
+                if (!current2) {
+                    current2 = current3;
                 }
-                return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
+
+                let sixHourDepths = sixDayDepthsData.get()
+
+                if ((sixHourDepths != null) && !sixHourDepths["piCistern2"]) {
+                    sixHourDepths['piCistern2'] = sixHourDepths['piCistern3'];
+                }
+                
+                if ((current != null) && (sixHourDepths != null)) {
+                    let gallons =  gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit) - 
+                        gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].enter, sixHourDepths['piCistern2'].enter, sixHourDepths['piCistern3'].enter);
+                    const duration = moment.duration(moment(current.time).diff(moment(sixHourDepths['date']))).humanize();
+                    // console.log("change1", gallonsInTanksPressure(sixHourDepths['date'], sixHourDepths['piCistern'].exit, sixHourDepths['piCistern2'].exit, sixHourDepths['piCistern3'].exit),
+                    //     "->", gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit), duration);
+                    if (gallons < 0) {
+                        trend = "Down";
+                        gallons = - gallons;
+                    } else {
+                        trend = "Up";
+                    }
+                    return `${trend} ${gallons.toFixed(1)} gallons in ${duration}`;
+                } else {
+                    return "";
+                }
             } else {
                 return "";
             }
-        } else {
+        } catch (error) {
+            console.error("change2 error", error);
             return "";
         }
     },

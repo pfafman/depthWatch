@@ -55,10 +55,15 @@ gallonsInTanks = (sensorReading, time) => {
 
 gallonsInTanksPressure = (time, tank1, tank2, tank3) => {
     let gallons = capacity;
-    let theMaxDepth = newMaxDepth;
+
+    let trueTankOffset = tank2Offset
+
+    if (moment(time).isAfter(moment("2025-12-21"))) {
+        trueTankOffset += 5;
+    }
 
     if (tank2 === undefined) {
-        tank2 = tank1 + tank2Offset;
+        tank2 = tank1 + trueTankOffset;
     }
 
     if (tank3 === undefined) {
@@ -73,17 +78,12 @@ gallonsInTanksPressure = (time, tank1, tank2, tank3) => {
         tank3 = 59;
     }
 
-
-    if (moment(time).isBefore(moment("2023-05-10"))) {
-        theMaxDepth = oldMaxDepth;
-    }
-
     if (tank1 > 59) {
-        gallons = capacity - noAccessGallons;
+        gallons = capacity; // - noAccessGallons;
     } else if (tank1 < 0) {
         gallons = 0;
     } else {
-        gallons = (tank1  + tank2 + tank3) * gallonsPerInch/3 - noAccessGallons;
+        gallons = (tank1  + tank2 + tank3) * gallonsPerInch/3; // - noAccessGallons;
     }
 
     return Math.round(gallons);
