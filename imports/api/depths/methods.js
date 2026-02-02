@@ -9,7 +9,7 @@ Meteor.methods({
 
   async dayDepth (date) {
 
-    console.log("dayDepth Called for", date);
+    //console.log("dayDepth Called for", date);
     const pipeline = [
       {
         $match: {
@@ -77,9 +77,85 @@ Meteor.methods({
 
     depths['day'] = date
 
-    console.log("dayDepth result for", date, depths);
+    //console.log("dayDepth result for", date, depths);
     return depths;
   },
+
+
+  async hourDepth (date) {
+
+    //console.log("hourDepth Called for", date);
+    const pipeline = [
+      {
+        $match: {
+          type: 'pressure',
+          time: {
+            $gte: moment(date).startOf('hour').toDate(),
+            $lte: moment(date).endOf('hour').toDate()
+          }
+        }
+      },
+      {
+        $group: {
+          '_id': {
+            'host': "$host"
+          },
+          'enter': {
+            $first: "$enter"
+          },
+          'max': {
+            $max: "$max"
+          },
+          'min': {
+            $min: "$min"
+          },
+          'exit': {
+            $last: "$exit"
+          },
+          'maxAve': {
+            $avg: "$max"
+          },
+          'minAve': {
+            $avg: "$min"
+          },
+          'sum': {
+            $sum: "$sum"
+          },
+          'readings': {
+            $sum: "$readings"
+          },
+          'time': {
+            $first: "$time"
+          }
+        }
+      },
+      {
+        $project: {
+          _id:        0,
+          "host":    "$_id.host",
+          "enter":    1,
+          "max":      1,
+          "min":      1,
+          "exit":     1,
+          "sum":      1,
+          "readings": 1
+        }
+      }
+    ];
+
+    let results = await Depths.aggregate(pipeline, {}).toArray();
+
+    let depths = {};
+    results.forEach((result) => {
+      depths[result.host] = result;
+    });
+
+    depths['date'] = date
+
+    //console.log("dayDepth result for", date, depths);
+    return depths;
+  },
+
 
   async dayDepths (host) {
 
@@ -300,7 +376,7 @@ Meteor.methods({
   },
 
 
-  async hourDepths (host) {
+  async hourDepthsAll () {
 
       //console.log("hourDepths: called");
 
@@ -310,8 +386,7 @@ Meteor.methods({
             {
               $gt: moment().subtract(5, 'days').startOf('day').toDate()
             },
-            type: 'pressure',
-            host: host
+            type: 'pressure'
           }
         },
         {
@@ -320,6 +395,7 @@ Meteor.methods({
         {
           $group: {
             '_id': {
+              'host': "$host",
               'day': {
                 $dateToString: {
                   format: "%Y-%m-%d %H:00:00",
@@ -349,12 +425,13 @@ Meteor.methods({
           }
         },
         {
-          $sort : { '_id.day' : 1 } 
+          $sort : { '_id.day' : 1, '_id.host': 1 } 
         },
         {
           $project: {
             _id:        0,
             "time":    "$_id.day",
+            "host":    "$_id.host",
             "enter":    1,
             "max":      1,
             "min":      1,
@@ -370,6 +447,78 @@ Meteor.methods({
       return result;
   },
 
+
+async hourDepths (host) {
+
+      //console.log("hourDepths: called");
+
+      const pipeline = [
+        {
+          $match: { 'time' :
+            {
+              $gt: moment().subtract(5, 'days').startOf('day').toDate()
+            },
+            type: 'pressure',
+            host: host
+          }
+        },
+        {
+          $sort : { 'time' : 1 } 
+        },
+        {
+          $group: {
+            '_id': {
+              'host': "$host",
+              'day': {
+                $dateToString: {
+                  format: "%Y-%m-%d %H:00:00",
+                  date: "$time",
+                  timezone: "America/Denver"
+                }
+              }
+            },
+            'enter': {
+              $first: "$enter"
+            },
+            'max': {
+              $max: "$max"
+            },
+            'min': {
+              $min: "$min"
+            },
+            'exit': {
+              $last: "$exit"
+            },
+             'sum': {
+              $sum: "$sum"
+            },
+            'readings': {
+              $sum: "$readings"
+            }
+          }
+        },
+        {
+          $sort : { '_id.day' : 1, '_id.host': 1 } 
+        },
+        {
+          $project: {
+            _id:        0,
+            "time":    "$_id.day",
+            "host":    "$_id.host",
+            "enter":    1,
+            "max":      1,
+            "min":      1,
+            "exit":     1,
+            "sum":      1,
+            "readings": 1
+          }
+        }
+      ];
+
+      let result = await Depths.aggregate(pipeline, {}).toArray();
+
+      return result;
+  },
 
   async depthRange () {
     const pipeline = [
