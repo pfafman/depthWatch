@@ -9,18 +9,18 @@
     "@babel/plugin-transform-class-static-block": "^7.28.6",
     "@babel/runtime": "^7.28.6",
     "@materializecss/materialize": "^2.3.2",
-    "@swc/helpers": "^0.5.18",
+    "@swc/helpers": "^0.5.19",
     "billboard.js": "^3.18.0",
     "d3": "^7.9.0",
     "jquery": "^4.0.0",
-    "meteor-node-stubs": "^1.2.25",
+    "meteor-node-stubs": "^1.2.26",
     "moment": "^2.30.1"
   },
   "devDependencies": {
     "@meteorjs/rspack": "^1.0.0",
     "@rsdoctor/rspack-plugin": "^1.5.2",
-    "@rspack/cli": "^1.7.5",
-    "@rspack/core": "^1.7.5",
+    "@rspack/cli": "^1.7.6",
+    "@rspack/core": "^1.7.6",
     "chai": "^6.2.2"
   },
   "meteor": {
