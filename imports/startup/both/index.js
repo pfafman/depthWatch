@@ -1,5 +1,5 @@
 // Import modules used by both client and server through a single index entry point
 // e.g. useraccounts configuration file.
 
-VERSION = "2.4.1";
+VERSION = "2.5.0";
 

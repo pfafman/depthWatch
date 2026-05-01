@@ -113,7 +113,7 @@ Api.addRoute('insertPressureDepth', {authRequired: false}, {
     let host = this.bodyParams.host;
     let reading = depth;
 
-    if ((depth > 80) || (depth <= 0)) {
+    if ((depth > 80) || (depth < 0)) {
       console.log("insertPressureDepth: bad value", depth);
       console.log('Return bad value ...');
       console.log("");
