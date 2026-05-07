@@ -217,7 +217,7 @@ Template.daily.helpers({
             current = currentDayDepths.get();
             old = weekOldDayDepths.get();
 
-            console.log("Trend",current, old);
+            //console.log("Trend",current, old);
 
             if (!current['piCistern2']) {
                 current['piCistern2'] = {};

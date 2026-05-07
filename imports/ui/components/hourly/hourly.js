@@ -51,48 +51,59 @@ Template.hourly.onRendered (() => {
 
                 if ((current != null) && (current2 != null) && (current3 != null)) {
                     
-                    const percent = 100*gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit)/capacity;
-                    const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
-                    const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
-                    minHeight.set(newMaxDepth - range[0].max);
-                    maxHeight.set(newMaxDepth - range[0].min);
+                    console.log("Gauge Chart has values", current, current2, current3);
+                        
+                    if ((current.exit != null) && (current2.exit != null) && (current3.exit != null)) {
+                        
+                        //console.log("Gauge Chart has values", current.time, current.exit, current2.exit, current3,exit, capacity);
+                        
+                        const percent = 100*gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit)/capacity;
+                        const min = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].max)/capacity;
+                        const max = 100*gallonsInTanksPressure(current.time, newMaxDepth - range[0].min)/capacity;
+                        minHeight.set(newMaxDepth - range[0].max);
+                        maxHeight.set(newMaxDepth - range[0].min);
 
-                    var gaugeChart = bb.generate({
-                      data: {
-                        columns: [
-                            ["Level", percent]
-                        ],
-                        type: gauge(), // for ESM specify as: gauge()
-                      },
-                      gauge: {
-                        type: "multi",
-                        arcs: {
-                          minWidth: 40
-                        }
-                      },
-                      color: {
-                        pattern: [
-                          "#FF0000",
-                          "#FFFF00",
-                          "#FFA500",
-                          "#0055B3",
-                          "#00FF00"
-                        ],
-                        threshold: {
-                          values: [
-                            15,
-                            25,
-                            50,
-                            75,
-                            90
-                          ]
-                        }
-                      },
-                      size: {
-                        height: 200
-                      },
-                      bindto: "#gaugeChart"
-                    });
+                        console.log("Gauge Chart has values", percent, min, max, range[0]);
+
+                        var gaugeChart = bb.generate({
+                          data: {
+                            columns: [
+                                ["Level", percent]
+                            ],
+                            type: gauge(), // for ESM specify as: gauge()
+                          },
+                          gauge: {
+                            type: "multi",
+                            arcs: {
+                              minWidth: 40
+                            }
+                          },
+                          color: {
+                            pattern: [
+                              "#FF0000",
+                              "#FFFF00",
+                              "#FFA500",
+                              "#0055B3",
+                              "#00FF00"
+                            ],
+                            threshold: {
+                              values: [
+                                15,
+                                25,
+                                50,
+                                75,
+                                90
+                              ]
+                            }
+                          },
+                          size: {
+                            height: 200
+                          },
+                          bindto: "#gaugeChart"
+                        });
+                    } else {
+                        console.log("Gauge Chart: Bad Values !!!");
+                    }
                 }
             }
         } catch (error) {
