@@ -23,14 +23,19 @@ offset = 0.5*gallonsPerInch*2/3;
  * 
  *   2025-10    :   11.23"
  *   2025-12-27 :   14"
- *   2026-01-05 :   
+ * 
+ *  After Check Valve Removal
+ *   2026-06-12 : -0.73   
  * 
  * 
  */
 
-tank2Offset = 11;  // See Above3
 
-noAccessGallons = 2 * tank2Offset * gallonsPerInch/3;
+tank2Offset = 0;
+
+tankBottom = 4;  // What the pump cannot get at.
+
+noAccessGallons = tankBottom * gallonsPerInch/3;
 
 
 gallonsInTanks = (sensorReading, time) => {
