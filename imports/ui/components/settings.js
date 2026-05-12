@@ -14,8 +14,6 @@ minValidReading = 66.8 - 59;  // 7.8 inches
 
 capacity = tankCapacity * 3; 
 
-offset = 0.5*gallonsPerInch*2/3;
-
 
 /********************
  * 
@@ -51,7 +49,7 @@ gallonsInTanks = (sensorReading, time) => {
     } else if (sensorReading < minValidReading) {
         gallons = capacity - ((sensorReading - minValidReading) * gallonsPerInch/3);
     } else {
-        gallons = (theMaxDepth-sensorReading) * gallonsPerInch; // + offset;
+        gallons = (theMaxDepth-sensorReading) * gallonsPerInch;
     }
 
     return Math.round(gallons);

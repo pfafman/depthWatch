@@ -51,7 +51,7 @@ Template.hourly.onRendered (() => {
 
                 if ((current != null) && (current2 != null) && (current3 != null)) {
                     
-                    console.log("Gauge Chart has values", current, current2, current3);
+                    //console.log("Gauge Chart has values", current, current2, current3);
                         
                     if ((current.exit != null) && (current2.exit != null) && (current3.exit != null)) {
                         
