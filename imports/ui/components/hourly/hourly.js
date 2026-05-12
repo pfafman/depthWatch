@@ -51,7 +51,7 @@ Template.hourly.onRendered (() => {
 
                 if ((current != null) && (current2 != null) && (current3 != null)) {
                     
-                    //console.log("Gauge Chart has values", current, current2, current3);
+                    // console.log("Gauge Chart has values", current, current2, current3);
                         
                     if ((current.exit != null) && (current2.exit != null) && (current3.exit != null)) {
                         
@@ -579,9 +579,19 @@ Template.hourly.helpers({
         }
     },
 
-    tankOffset() {
+    tank3Offset() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
         const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current3 != null)) {
+            return (current3.exit - current.exit).toFixed(2);
+        } else {
+            return "N/A";
+        }
+    },
+
+    tank2Offset() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
         if ((current != null) && (current3 != null)) {
             return (current3.exit - current.exit).toFixed(2);
         } else {
