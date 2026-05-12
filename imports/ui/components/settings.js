@@ -35,7 +35,7 @@ tank2Offset = 0;
 
 tankBottom = 4;  // What the pump cannot get at.
 
-noAccessGallons = tankBottom * gallonsPerInch/3;
+noAccessGallons = tankBottom * gallonsPerInch;
 
 
 gallonsInTanks = (sensorReading, time) => {
