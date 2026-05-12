@@ -652,11 +652,38 @@ Template.hourly.helpers({
     },
 
 
-    age() {
-        const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+    lastUpdate() {
+        const current = Depths.findOne({type: 'pressure'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             time = moment(current.time).format('llll');
             return time;
+        } else {
+            return "";
+        }
+    },
+
+    age1() {
+        const last = Depths.findOne({type: 'pressure', host:  'piCistern'},{ sort: {time: -1}, limit:1 });
+        if (last != null) {
+            return "Last update " + moment.duration(moment().diff(last.time)).humanize()
+        } else {
+            return "";
+        }
+    },
+
+    age2() {
+        const last = Depths.findOne({type: 'pressure', host:  'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if (last != null) {
+            return "Last update " + moment.duration(moment().diff(last.time)).humanize()
+        } else {
+            return "";
+        }
+    },
+
+    age3() {
+        const last = Depths.findOne({type: 'pressure', host:  'piCistern3'},{ sort: {time: -1}, limit:1 });
+        if (last != null) {
+            return "Last update " + moment.duration(moment().diff(last.time)).humanize()
         } else {
             return "";
         }
