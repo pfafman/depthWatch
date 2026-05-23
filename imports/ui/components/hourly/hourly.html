@@ -11,23 +11,34 @@
           {{#if overFlow}}
             &nbsp; <a class="btn-small pulse red"><i class="material-icons">water</i></a>
           {{else}}
-            &nbsp; <a class="btn-small pulse yellow"><i class="material-icons">water</i></a>
+            &nbsp; <a class="btn-small yellow"><i class="material-icons">water</i></a>
           {{/if}}
-          &nbsp; <i class="smaller">Pressure Sensor reading is {{currentReadingPressure}} inches</i>
+          &nbsp; <i class="smaller">{{currentReadingPressure}} inches</i>
         {{/if}}
       </div>
       <div class="flow-text current">
         Tank2 has {{currentDepth2}} inches, down {{currentDown2}} inches. Tank (2-1) offset {{tank2Offset}} inches. <small><i>{{age2}}</i></small>
+        {{#if overCapacity2}}
+          {{#if overFlow2}}
+            &nbsp; <a class="btn-small pulse red"><i class="material-icons">water</i></a>
+          {{else}}
+            &nbsp; <a class="btn-small yellow"><i class="material-icons">water</i></a>
+          {{/if}}
+          &nbsp; <i class="smaller">{{currentReadingPressure2}} inches</i>
+        {{/if}}
       </div>
       <div class="flow-text current">
         Tank3 has {{currentDepth3}} inches, down {{currentDown3}} inches.  Tank (3-1) offset {{tank3Offset}} inches. <small><i>{{age3}}</i></small>
+        {{#if overCapacity3}}
+          {{#if overFlow3}}
+            &nbsp; <a class="btn-small pulse red"><i class="material-icons">water</i></a>
+          {{else}}
+            &nbsp; <a class="btn-small yellow"><i class="material-icons">water</i></a>
+          {{/if}}
+          &nbsp; <i class="smaller">{{currentReadingPressure3}} inches</i>
+        {{/if}}
       </div>
       <div class="flow-text current">
-        <!--{{#if haveRange}}
-          <span class="range"> &nbsp; Range {{minHeight}} -> {{maxHeight}}</span>
-        {{/if}}
-        <br/>
-        -->
         {{gallons}} out of {{capacity}} gallons{{#if isDown}}, down {{down}} gallons{{/if}} 
         <br/>
         <small><i>Note: Cannot access {{noAccess}} gallons</i></small>  

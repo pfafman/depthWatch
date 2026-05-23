@@ -626,6 +626,24 @@ Template.hourly.helpers({
         }
     },
 
+    currentReadingPressure2() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current.overCapacity)) {
+            return current.minReading.toFixed(1);
+        } else {
+            return "";
+        }
+    },
+
+    currentReadingPressure3() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        if ((current != null) && (current.overCapacity)) {
+            return current.minReading.toFixed(1);
+        } else {
+            return "";
+        }
+    },
+
 
     currentHeight() {
         const current = Depths.findOne({type: 'sonic'},{ sort: {time: -1}, limit:1 });
@@ -733,8 +751,44 @@ Template.hourly.helpers({
         }
     },
 
+    overCapacity2() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.overCapacity;
+        } else {
+            return false;
+        }
+    },
+
+    overCapacity3() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.overCapacity;
+        } else {
+            return false;
+        }
+    },
+
     overFlow() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.overFlow;
+        } else {
+            return false;
+        }
+    },
+
+    overFlow2() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            return current.overFlow;
+        } else {
+            return false;
+        }
+    },
+
+    overFlow3() {
+        const current = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
         if (current != null) {
             return current.overFlow;
         } else {
