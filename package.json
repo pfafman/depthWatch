@@ -6,8 +6,8 @@
     "test": "meteor test --once --driver-package meteortesting:mocha"
   },
   "dependencies": {
-    "@babel/plugin-transform-class-static-block": "^7.28.6",
-    "@babel/runtime": "^7.29.2",
+    "@babel/plugin-transform-class-static-block": "^7.29.7",
+    "@babel/runtime": "^7.29.7",
     "@materializecss/materialize": "^2.3.3",
     "@swc/helpers": "^0.5.21",
     "billboard.js": "^3.18.0",
@@ -19,8 +19,8 @@
   "devDependencies": {
     "@meteorjs/rspack": "^2.0.1",
     "@rsdoctor/rspack-plugin": "^1.5.11",
-    "@rspack/cli": "^2.0.3",
-    "@rspack/core": "^2.0.3",
+    "@rspack/cli": "^2.0.4",
+    "@rspack/core": "^2.0.4",
     "chai": "^6.2.2"
   },
   "meteor": {
