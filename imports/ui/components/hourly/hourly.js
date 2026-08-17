@@ -271,6 +271,7 @@ Template.hourly.onRendered (() => {
                 },
                 bindto: "#hourlyPressureChart"
             });
+            console.log("Chart?", chart);
             hourDepths1Running = false;
         }
     
@@ -734,8 +735,11 @@ Template.hourly.helpers({
 
     isDown() {
         const current = Depths.findOne({type: 'pressure', host: 'piCistern'},{ sort: {time: -1}, limit:1 });
-        if ((current != null)  && (gallonsInTanksPressure(current.time, current.exit) < capacity)) {
-            return true;
+        const current2 = Depths.findOne({type: 'pressure', host: 'piCistern2'},{ sort: {time: -1}, limit:1 });
+        const current3 = Depths.findOne({type: 'pressure', host: 'piCistern3'},{ sort: {time: -1}, limit:1 });
+        if (current != null) {
+            const down =  capacity - gallonsInTanksPressure(current.time, current.exit, current2.exit, current3.exit);
+            return (down > 0)
         } else {
             return false;
         }
