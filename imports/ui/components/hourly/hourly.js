@@ -203,13 +203,13 @@ Template.hourly.onRendered (() => {
             results.forEach( depth => {
 
                 if (cRec.time != depth.time) {
-                    if (cRec.time != 0) {
+                    if ((cRec.time != 0) && (cRec.piCistern != null)){
                         // New Rec
                         times.push(cRec.time);
 
-                        if (!cRec.piCistern2) {
-                            cRec.piCistern2 = cRec.piCistern3;
-                        }
+                        // if (!cRec.piCistern2) {
+                        //     cRec.piCistern2 = cRec.piCistern3;
+                        // }
                         data.push([
                             gallonsInTanksPressure(cRec.time, cRec.piCistern.enter, cRec.piCistern2.enter, cRec.piCistern3.enter),
                             gallonsInTanksPressure(cRec.time, cRec.piCistern.max, cRec.piCistern2.max, cRec.piCistern3.max),
