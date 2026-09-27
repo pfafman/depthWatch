@@ -8,9 +8,9 @@
   "dependencies": {
     "@babel/plugin-transform-class-static-block": "^8.0.5",
     "@babel/runtime": "^8.0.5",
-    "@materializecss/materialize": "^2.3.3",
+    "@materializecss/materialize": "^2.4.0",
     "@swc/helpers": "^0.5.23",
-    "billboard.js": "^4.0.3",
+    "billboard.js": "^4.1.0",
     "d3": "^7.9.0",
     "jquery": "^4.0.0",
     "meteor-node-stubs": "^1.2.30",
@@ -19,8 +19,8 @@
   "devDependencies": {
     "@meteorjs/rspack": "^2.2.0",
     "@rsdoctor/rspack-plugin": "^1.6.4",
-    "@rspack/cli": "^2.2.4",
-    "@rspack/core": "^2.2.4",
+    "@rspack/cli": "^2.2.7",
+    "@rspack/core": "^2.2.7",
     "chai": "^6.2.2"
   },
   "meteor": {
